@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
-import { addDuration, dateDifference, isoWeekNumber } from './date-calc'
+import { addDuration, dateDifference, formatLong, isoWeekNumber, weekdayLabel } from './date-calc'
 
 describe('dateDifference', () => {
   it('breaks a span into calendar years, months and days', () => {
@@ -57,5 +57,13 @@ describe('addDuration', () => {
 describe('isoWeekNumber', () => {
   it('places 2024-01-01 (a Monday) in week 1', () => {
     assert.equal(isoWeekNumber(new Date(2024, 0, 1)), 1)
+  })
+})
+
+describe('Chinese date formatting', () => {
+  it('formats weekdays and long dates in Simplified Chinese', () => {
+    const monday = new Date(2024, 0, 1, 9, 5, 3)
+    assert.equal(weekdayLabel(monday, 'zh-CN'), '周一')
+    assert.equal(formatLong(monday, 'zh-CN'), '2024-01-01 09:05:03 (周一)')
   })
 })

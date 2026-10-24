@@ -3,6 +3,7 @@
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -20,6 +21,8 @@ export const UnitConvertWorkspace = ({ tool }: WorkspaceProps) => {
   const t = useTranslate()
   const { locale } = useLocale()
   const converter = useUnitConvert()
+  const localizeName = (copy: { ja: string; en: string }) =>
+    locale === 'zh-CN' ? (getChineseCopy(copy.en) ?? copy.en) : copy[locale]
   const valueId = `${fieldId}-value`
   const unitId = `${fieldId}-unit`
 
@@ -38,7 +41,7 @@ export const UnitConvertWorkspace = ({ tool }: WorkspaceProps) => {
                     variant={family.id === converter.familyId ? 'default' : 'outline'}
                     onClick={() => converter.selectFamily(family.id)}
                   >
-                    {family.name[locale]}
+                    {localizeName(family.name)}
                   </Button>
                 ))}
               </div>
@@ -67,7 +70,7 @@ export const UnitConvertWorkspace = ({ tool }: WorkspaceProps) => {
                 >
                   {converter.family.units.map((unit) => (
                     <option key={unit.id} value={unit.id}>
-                      {unit.name[locale]} ({unit.symbol})
+                      {localizeName(unit.name)} ({unit.symbol})
                     </option>
                   ))}
                 </select>
@@ -84,7 +87,7 @@ export const UnitConvertWorkspace = ({ tool }: WorkspaceProps) => {
         <Card className="overflow-hidden border-border/70">
           <CardHeader className="border-b bg-muted/30 py-3">
             <CardTitle className="text-sm">
-              {t('換算結果', 'Converted values')} — {converter.family.name[locale]}
+              {t('換算結果', 'Converted values')} — {localizeName(converter.family.name)}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -98,7 +101,7 @@ export const UnitConvertWorkspace = ({ tool }: WorkspaceProps) => {
                   )}
                 >
                   <div className="flex min-w-0 items-center gap-2">
-                    <span className="truncate text-sm">{row.unit.name[locale]}</span>
+                    <span className="truncate text-sm">{localizeName(row.unit.name)}</span>
                     <Badge variant="outline" className="font-mono text-[11px]">
                       {row.unit.symbol}
                     </Badge>

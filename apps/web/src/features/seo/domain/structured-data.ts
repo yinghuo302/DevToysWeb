@@ -1,6 +1,6 @@
 import type { ContentPageSlug } from '@/features/content/domain/page-slugs'
 import { getDictionary, type Locale } from '@/i18n/dictionaries'
-import { type ToolDefinition, tools } from '@/libs/domain/catalog'
+import { getToolTitle, type ToolDefinition, tools } from '@/libs/domain/catalog'
 import { getToolPath } from '@/libs/domain/tool-path'
 import { toolDescription } from './metadata'
 import { absoluteUrl, siteName, siteUrl } from './site'
@@ -37,7 +37,7 @@ export const toolListJsonLd = (locale: Locale) => ({
   itemListElement: tools.map((tool, index) => ({
     '@type': 'ListItem',
     position: index + 1,
-    name: tool.title[locale],
+    name: getToolTitle(tool, locale),
     url: `${siteUrl}${getToolPath(locale, tool)}`,
   })),
 })
@@ -46,7 +46,7 @@ export const toolJsonLd = (tool: ToolDefinition, locale: Locale) => ({
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   ...freeBrowserApp,
-  name: tool.title[locale],
+  name: getToolTitle(tool, locale),
   description: toolDescription(tool, locale),
   url: `${siteUrl}${getToolPath(locale, tool)}`,
   inLanguage: locale,
@@ -77,7 +77,7 @@ export const breadcrumbJsonLd = (tool: ToolDefinition, locale: Locale) => ({
     {
       '@type': 'ListItem',
       position: 2,
-      name: tool.title[locale],
+      name: getToolTitle(tool, locale),
       item: `${siteUrl}${getToolPath(locale, tool)}`,
     },
   ],

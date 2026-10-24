@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
+import { httpStatusChineseSummaries } from '@/i18n/http-status-translations'
 import { filterHttpStatuses, findHttpStatus, httpStatuses, statusClassOf } from './http-status'
 
 describe('httpStatuses', () => {
@@ -23,6 +24,16 @@ describe('httpStatuses', () => {
       assert.ok(status.summary.ja.length > 0, `${status.code} has no Japanese summary`)
       assert.ok(status.summary.en.length > 0, `${status.code} has no English summary`)
       assert.match(status.reference, /^RFC \d+ §/, `${status.code} has no reference`)
+    }
+  })
+
+  it('provides a Simplified Chinese summary for every registered status', () => {
+    for (const status of httpStatuses) {
+      assert.match(
+        httpStatusChineseSummaries[status.code] ?? '',
+        /[\u3400-\u9fff]/,
+        `${status.code} has no Chinese summary`,
+      )
     }
   })
 })

@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { contentPageLinks } from '@/features/content/domain/page-slugs'
-import { getDictionary, isLocale, type Locale } from '@/i18n/dictionaries'
-import { findTool } from '@/libs/domain/catalog'
+import { defaultLocale, getDictionary, isLocale, type Locale } from '@/i18n/dictionaries'
+import { findTool, getToolDescription, getToolTitle } from '@/libs/domain/catalog'
 import { getToolPath } from '@/libs/domain/tool-path'
 
 const suggestions = ['json-format', 'base64', 'unit-convert', 'timer', 'qr-code', 'text-diff']
@@ -14,10 +14,10 @@ const suggestions = ['json-format', 'base64', 'unit-convert', 'timer', 'qr-code'
 /**
  * Rendered by the static `404.html`, which CloudFront serves for any unmatched
  * path — so the locale cannot come from a route param and is read from the URL
- * after mount instead. Japanese is the default, matching `/`.
+ * after mount instead. Simplified Chinese is the default, matching `/`.
  */
 const useUrlLocale = (): Locale => {
-  const [locale, setLocale] = useState<Locale>('ja')
+  const [locale, setLocale] = useState<Locale>(defaultLocale)
 
   useEffect(() => {
     const segment = window.location.pathname.split('/').filter(Boolean)[0] ?? ''
@@ -93,9 +93,11 @@ export const NotFoundView = () => {
                     {tool.emoji}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium">{tool.title[locale]}</span>
+                    <span className="block truncate text-sm font-medium">
+                      {getToolTitle(tool, locale)}
+                    </span>
                     <span className="block truncate text-xs text-muted-foreground">
-                      {tool.description[locale]}
+                      {getToolDescription(tool, locale)}
                     </span>
                   </span>
                 </Link>
@@ -106,7 +108,11 @@ export const NotFoundView = () => {
       </main>
 
       <footer className="border-t border-border px-4 py-8 text-center text-xs text-muted-foreground">
-        <nav aria-label={locale === 'ja' ? 'サイト情報' : 'Site information'}>
+        <nav
+          aria-label={
+            locale === 'ja' ? 'サイト情報' : locale === 'zh-CN' ? '网站信息' : 'Site information'
+          }
+        >
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2">
             {contentPageLinks.map((link) => (
               <li key={link.slug}>

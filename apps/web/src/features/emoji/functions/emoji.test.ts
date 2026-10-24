@@ -12,9 +12,10 @@ import {
 } from './emoji'
 
 describe('filterEmojis', () => {
-  it('matches Japanese and English names', () => {
+  it('matches Japanese, English, and Simplified Chinese names', () => {
     assert.equal(filterEmojis(emojiCatalog, 'イヌの顔', 'all')[0]?.emoji, '🐶')
     assert.equal(filterEmojis(emojiCatalog, 'rocket', 'all')[0]?.emoji, '🚀')
+    assert.equal(filterEmojis(emojiCatalog, '嘿嘿', 'all')[0]?.emoji, '😀')
   })
 
   it('matches Unicode code points and HTML entities', () => {
@@ -70,6 +71,11 @@ describe('formatEmojiList', () => {
   it('picks the requested locale for the name column', () => {
     const [row] = formatEmojiList(emojiCatalog.slice(0, 1), 'ja').split('\n')
     assert.equal(row, '😀\tにっこり笑う\tU+1F600\t&#x1f600;')
+  })
+
+  it('formats Simplified Chinese names for zh-CN', () => {
+    const [row] = formatEmojiList(emojiCatalog.slice(0, 1), 'zh-CN').split('\n')
+    assert.equal(row, '😀\t嘿嘿\tU+1F600\t&#x1f600;')
   })
 })
 

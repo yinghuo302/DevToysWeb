@@ -59,4 +59,8 @@ describe('formatTimeAnnouncement', () => {
       'At the tone, the time will be 9 hours, 5 minutes, and 10 seconds P.M.',
     )
   })
+
+  it('formats a Simplified Chinese announcement', () => {
+    assert.equal(formatTimeAnnouncement(at(21, 5, 10), 'zh-CN'), '现在是下午9点5分10秒')
+  })
 })

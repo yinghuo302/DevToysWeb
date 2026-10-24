@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { alternatesFor } from '@/features/seo/domain/site'
+import { defaultLocale } from '@/i18n/dictionaries'
 
 // The static export renders `/` as an empty client-redirect shell, so point
-// crawlers at the Japanese home page instead of letting them index a blank URL.
+// crawlers at the default-language home page instead of indexing a blank URL.
 export const metadata: Metadata = {
-  alternates: alternatesFor('ja'),
+  alternates: alternatesFor(defaultLocale),
 }
 
 const Page = () => {
-  redirect('/ja/')
+  redirect(`/${defaultLocale}/`)
 }
 
 export default Page

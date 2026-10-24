@@ -1,5 +1,6 @@
 'use client'
 
+import { intlLocale, type Locale } from '@/i18n/dictionaries'
 import { formatTimeAnnouncement } from './time-signal'
 
 let activeUtterance: SpeechSynthesisUtterance | null = null
@@ -15,13 +16,19 @@ export const cancelTimeAnnouncement = () => {
   activeUtterance = null
 }
 
-export const speakTimeAnnouncement = (date: Date, locale: 'ja' | 'en', onEnd?: () => void) => {
+export const speakTimeAnnouncement = (date: Date, locale: Locale, onEnd?: () => void) => {
   if (!isSpeechSupported()) return false
 
   if (activeUtterance) window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(formatTimeAnnouncement(date, locale))
-  utterance.lang = locale === 'ja' ? 'ja-JP' : 'en-US'
-  utterance.rate = locale === 'ja' ? 0.95 : 0.8
+  utterance.lang = intlLocale(locale)
+  if (locale === 'ja') {
+    utterance.rate = 0.95
+  } else if (locale === 'zh-CN') {
+    utterance.rate = 0.85
+  } else {
+    utterance.rate = 0.8
+  }
   utterance.pitch = 0.9
 
   const voice = window.speechSynthesis

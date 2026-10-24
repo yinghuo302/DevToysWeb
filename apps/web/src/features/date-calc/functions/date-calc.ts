@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/dictionaries'
+
 /** Calendar breakdown between two instants, plus flat totals. */
 export type DateDifference = {
   years: number
@@ -117,11 +119,13 @@ export const addDuration = (base: Date, parts: DurationParts, sign: 1 | -1): Dat
   return result
 }
 
-const WEEKDAYS_JA = ['日', '月', '火', '水', '木', '金', '土']
-const WEEKDAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const WEEKDAYS: Record<Locale, string[]> = {
+  ja: ['日', '月', '火', '水', '木', '金', '土'],
+  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  'zh-CN': ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+}
 
-export const weekdayLabel = (date: Date, locale: 'ja' | 'en') =>
-  (locale === 'ja' ? WEEKDAYS_JA : WEEKDAYS_EN)[date.getDay()]
+export const weekdayLabel = (date: Date, locale: Locale) => WEEKDAYS[locale][date.getDay()]
 
 /** ISO 8601 week number (weeks start Monday, week 1 contains the first Thursday). */
 export const isoWeekNumber = (date: Date) => {
@@ -148,7 +152,7 @@ export const toDateTimeLocal = (date: Date) => {
   )}:${pad(date.getMinutes())}`
 }
 
-export const formatLong = (date: Date, locale: 'ja' | 'en') => {
+export const formatLong = (date: Date, locale: Locale) => {
   const pad = (n: number) => String(n).padStart(2, '0')
   const base = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
     date.getHours(),

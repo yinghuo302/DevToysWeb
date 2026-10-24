@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/dictionaries'
+import type { LegacyLocale, Locale } from '@/i18n/dictionaries'
 
 /**
  * Every unit is described by how it maps to its family's base unit, so a
@@ -8,7 +8,7 @@ import type { Locale } from '@/i18n/dictionaries'
 export type Unit = {
   id: string
   symbol: string
-  name: Record<Locale, string>
+  name: Record<LegacyLocale, string>
   toBase: (value: number) => number
   fromBase: (value: number) => number
 }
@@ -27,7 +27,7 @@ export type UnitFamilyId =
 
 export type UnitFamily = {
   id: UnitFamilyId
-  name: Record<Locale, string>
+  name: Record<LegacyLocale, string>
   /** Unit selected when the family is opened. */
   defaultUnit: string
   units: Unit[]

@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/dictionaries'
+
 /** Interval choices offered by the time signal, in minutes. */
 export const signalIntervals = [60, 30, 15, 10, 5, 1] as const
 export type SignalInterval = (typeof signalIntervals)[number]
@@ -28,7 +30,7 @@ export const nextTelephoneSignalAt = (date: Date, minimumLeadMs = 0) => {
 }
 
 /** Speech text for the upcoming tone, localized to the active page language. */
-export const formatTimeAnnouncement = (date: Date, locale: 'ja' | 'en') => {
+export const formatTimeAnnouncement = (date: Date, locale: Locale) => {
   const hours = date.getHours()
   const hour = hours % 12
   const minutes = date.getMinutes()
@@ -37,6 +39,10 @@ export const formatTimeAnnouncement = (date: Date, locale: 'ja' | 'en') => {
   if (locale === 'ja') {
     const period = hours < 12 ? '午前' : '午後'
     return `${period}${hour}時${minutes}分${seconds}秒をお知らせします`
+  }
+  if (locale === 'zh-CN') {
+    const period = hours < 12 ? '上午' : '下午'
+    return `现在是${period}${hour || 12}点${minutes}分${seconds}秒`
   }
 
   const period = hours < 12 ? 'A.M.' : 'P.M.'

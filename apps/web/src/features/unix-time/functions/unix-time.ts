@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/dictionaries'
+
 export type ParsedInstant = {
   date: Date
   /** How the raw input was interpreted, for display. */
@@ -87,9 +89,10 @@ export const isoWeek = (date: Date): number => {
   return 1 + Math.round((target.getTime() - firstThursday.getTime()) / (86_400_000 * 7))
 }
 
-const WEEKDAYS = {
+const WEEKDAYS: Record<Locale, string[]> = {
   ja: ['日', '月', '火', '水', '木', '金', '土'],
   en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  'zh-CN': ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
 }
 
-export const weekday = (date: Date, locale: 'ja' | 'en') => WEEKDAYS[locale][date.getDay()]
+export const weekday = (date: Date, locale: Locale) => WEEKDAYS[locale][date.getDay()]

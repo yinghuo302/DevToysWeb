@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { useRecentTools } from '@/hooks/use-recent-tools'
 import {
   categoryOrder as categories,
+  getToolTitle,
   type ToolCategory,
   type ToolDefinition,
   tools,
@@ -89,7 +90,7 @@ const ToolLink = ({ tool, active }: { tool: ToolDefinition; active: boolean }) =
       <span className="w-5 text-center text-base" aria-hidden="true">
         {tool.emoji}
       </span>
-      <span className="truncate">{tool.title[locale]}</span>
+      <span className="truncate">{getToolTitle(tool, locale)}</span>
       {active && <span className="ml-auto size-1.5 rounded-full bg-primary" />}
     </Link>
   )
@@ -105,7 +106,7 @@ const RailLink = ({ tool, active }: { tool: ToolDefinition; active: boolean }) =
           <Link
             href={getToolPath(locale, tool)}
             aria-current={active ? 'page' : undefined}
-            aria-label={tool.title[locale]}
+            aria-label={getToolTitle(tool, locale)}
             className={cn(
               'flex size-10 items-center justify-center rounded-lg text-lg transition-colors',
               active ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-muted',
@@ -115,7 +116,7 @@ const RailLink = ({ tool, active }: { tool: ToolDefinition; active: boolean }) =
       >
         <span aria-hidden="true">{tool.emoji}</span>
       </TooltipTrigger>
-      <TooltipContent side="right">{tool.title[locale]}</TooltipContent>
+      <TooltipContent side="right">{getToolTitle(tool, locale)}</TooltipContent>
     </Tooltip>
   )
 }

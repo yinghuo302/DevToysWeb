@@ -4,6 +4,8 @@ import { Eye, Search, Sparkles, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import type { Locale } from '@/i18n/dictionaries'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -30,7 +32,7 @@ const CharacterRow = ({
   t,
 }: {
   item: InvisibleCharacter
-  locale: 'ja' | 'en'
+  locale: Locale
   t: (ja: string, en: string) => string
 }) => (
   <div className="grid gap-3 px-5 py-4 sm:grid-cols-[5rem_8.5rem_minmax(12rem,1fr)_minmax(12rem,1fr)_auto] sm:items-center">
@@ -44,8 +46,14 @@ const CharacterRow = ({
       <div className="text-muted-foreground">{item.javascript}</div>
     </div>
     <div className="min-w-0">
-      <p className="font-medium">{item.name[locale]}</p>
-      <p className="mt-1 text-xs text-muted-foreground">{item.description[locale]}</p>
+      <p className="font-medium">
+        {locale === 'zh-CN' ? (getChineseCopy(item.name.en) ?? item.name.en) : item.name[locale]}
+      </p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {locale === 'zh-CN'
+          ? (getChineseCopy(item.description.en) ?? item.description.en)
+          : item.description[locale]}
+      </p>
     </div>
     <div className="text-xs text-muted-foreground">
       {t('実体の1文字をコピー', 'Copy the actual character')}
@@ -208,7 +216,11 @@ export const InvisibleWorkspace = ({ tool }: WorkspaceProps) => {
                       </Badge>
                       <code className="text-xs">{item.unicode}</code>
                       <div className="min-w-0">
-                        <p className="truncate text-sm">{item.name[locale]}</p>
+                        <p className="truncate text-sm">
+                          {locale === 'zh-CN'
+                            ? (getChineseCopy(item.name.en) ?? item.name.en)
+                            : item.name[locale]}
+                        </p>
                         <p className="truncate text-xs text-muted-foreground">{item.javascript}</p>
                       </div>
                       <CopyButton value={item.character} />

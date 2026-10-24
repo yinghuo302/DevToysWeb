@@ -40,6 +40,7 @@ export const filterEmojis = (
       item.emoji,
       item.name.ja,
       item.name.en,
+      item.name.zh,
       getEmojiCodePoints(item.emoji),
       getEmojiHtml(item.emoji),
       getEmojiHtmlDecimal(item.emoji),
@@ -68,12 +69,12 @@ export const getEmojiHtmlDecimal = (value: string) =>
     .map((character) => `&#${character.codePointAt(0)};`)
     .join('')
 
-export const formatEmojiList = (entries: readonly EmojiEntry[], locale: 'ja' | 'en') =>
+export const formatEmojiList = (entries: readonly EmojiEntry[], locale: 'ja' | 'en' | 'zh-CN') =>
   entries
     .map((item) =>
       [
         item.emoji,
-        item.name[locale],
+        locale === 'zh-CN' ? item.name.zh : item.name[locale],
         getEmojiCodePoints(item.emoji),
         getEmojiHtml(item.emoji),
       ].join('\t'),

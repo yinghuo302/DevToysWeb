@@ -4,6 +4,7 @@ import { Dices, ListChecks, Search, Sparkles } from 'lucide-react'
 import { useId, useMemo } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import type { Locale } from '@/i18n/dictionaries'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -48,6 +49,9 @@ const categoryLabel = (category: EmojiCategory | 'all', t: (ja: string, en: stri
   return labels[category]
 }
 
+const emojiName = (item: EmojiEntry, locale: Locale) =>
+  locale === 'zh-CN' ? item.name.zh : item.name[locale]
+
 const OutputRow = ({ label, value }: { label: string; value: string }) => (
   <div className="border-b last:border-b-0">
     <div className="flex h-10 items-center justify-between gap-3 px-4">
@@ -74,19 +78,19 @@ const EmojiTile = ({
   item: EmojiEntry
   selected: boolean
   onSelect: (item: EmojiEntry) => void
-  locale: 'ja' | 'en'
+  locale: Locale
 }) => (
   <button
     type="button"
     onClick={() => onSelect(item)}
     className={`flex min-h-24 flex-col items-center justify-center gap-1 rounded-xl border p-2 text-center transition-colors hover:border-primary/60 hover:bg-accent/60 ${selected ? 'border-primary bg-accent' : 'border-border/70 bg-background'}`}
-    title={item.name[locale]}
+    title={emojiName(item, locale)}
   >
     <span className="text-3xl leading-none" aria-hidden="true">
       {item.emoji}
     </span>
     <span className="max-w-full truncate text-[11px] text-muted-foreground">
-      {item.name[locale]}
+      {emojiName(item, locale)}
     </span>
   </button>
 )
@@ -211,7 +215,7 @@ export const EmojiWorkspace = ({ tool }: WorkspaceProps) => {
                     {emoji.selected.emoji}
                   </span>
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{emoji.selected.name[locale]}</p>
+                    <p className="truncate font-medium">{emojiName(emoji.selected, locale)}</p>
                     <div className="mt-1 flex flex-wrap gap-1">
                       <Badge variant="outline">{categoryLabel(emoji.selected.category, t)}</Badge>
                       {isZwjSequence(emoji.selected.emoji) && (
@@ -318,13 +322,13 @@ export const EmojiWorkspace = ({ tool }: WorkspaceProps) => {
                       key={key}
                       variant="outline"
                       size="sm"
-                      title={item.name[locale]}
+                      title={emojiName(item, locale)}
                       onClick={() => emoji.select(item)}
                     >
                       <span className="text-lg" aria-hidden="true">
                         {item.emoji}
                       </span>
-                      {item.name[locale]}
+                      {emojiName(item, locale)}
                     </Button>
                   ))}
                 </div>

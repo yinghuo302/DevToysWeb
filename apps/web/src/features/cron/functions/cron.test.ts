@@ -4,8 +4,15 @@ import { analyzeCron, cronFieldValues } from './cron'
 
 const en = (expression: string) => analyzeCron(expression).description.en
 const ja = (expression: string) => analyzeCron(expression).description.ja
+const zh = (expression: string) => analyzeCron(expression).description['zh-CN']
 
 describe('analyzeCron descriptions', () => {
+  it('generates Simplified Chinese descriptions from the parsed schedule', () => {
+    assert.equal(zh('* * * * *'), '每分钟执行')
+    assert.equal(zh('0 9 * * *'), '每天，09:00执行')
+    assert.equal(zh('30 8 * * 1'), '每周星期一，08:30执行')
+  })
+
   it('reads a fixed time as a clock reading', () => {
     assert.equal(en('0 9 * * *'), 'At 09:00.')
     assert.equal(ja('0 9 * * *'), '毎日09:00に実行')

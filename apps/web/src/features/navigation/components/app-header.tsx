@@ -6,13 +6,32 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { GithubIcon } from '@/components/icons/github-icon'
 import { useLocale } from '@/components/locale-provider'
+import { isLocale, type Locale } from '@/i18n/dictionaries'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { categoryOrder as categories, type ToolDefinition, tools } from '@/libs/domain/catalog'
+import {
+  categoryOrder as categories,
+  getToolTitle,
+  type ToolDefinition,
+  tools,
+} from '@/libs/domain/catalog'
 import { getToolPath, isSamePath } from '@/libs/domain/tool-path'
 import { cn } from '@/libs/utils'
 import { CommandPalette, useCommandPalette } from './command-palette'
+
+const languageOptions: { locale: Locale; label: string }[] = [
+  { locale: 'ja', label: '日本語' },
+  { locale: 'en', label: 'English' },
+  { locale: 'zh-CN', label: '简体中文' },
+]
 
 /** Rendered after mount so the static export never ships a platform-specific hint. */
 const useShortcutHint = () => {
@@ -59,7 +78,7 @@ const MobileNav = ({ onNavigate }: { onNavigate: () => void }) => {
                     <span className="w-5 shrink-0 text-center text-base" aria-hidden="true">
                       {tool.emoji}
                     </span>
-                    <span className="truncate">{tool.title[locale]}</span>
+                    <span className="truncate">{getToolTitle(tool, locale)}</span>
                   </Link>
                 </li>
               ))}
@@ -77,8 +96,6 @@ export const AppHeader = () => {
   const palette = useCommandPalette()
   const shortcutHint = useShortcutHint()
   const [menuOpen, setMenuOpen] = useState(false)
-  const toggleLocale = () =>
-    router.push(pathname.replace(`/${locale}`, locale === 'ja' ? '/en' : '/ja'))
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
@@ -147,17 +164,32 @@ export const AppHeader = () => {
         <CommandPalette open={palette.open} onOpenChange={palette.setOpen} />
 
         <div className="ml-auto flex items-center gap-0.5">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleLocale}
-            aria-label={dictionary.switchLanguage}
-          >
-            <Languages className="size-4" aria-hidden="true" />
-            <span className="hidden sm:inline" aria-hidden="true">
-              {locale === 'ja' ? 'EN' : '日本語'}
-            </span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="sm" aria-label={dictionary.switchLanguage} />}
+            >
+              <Languages className="size-4" aria-hidden="true" />
+              <span className="hidden sm:inline" aria-hidden="true">
+                {languageOptions.find((option) => option.locale === locale)?.label}
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-36">
+              <DropdownMenuRadioGroup
+                value={locale}
+                onValueChange={(value) => {
+                  if (isLocale(value) && value !== locale) {
+                    router.push(pathname.replace(`/${locale}`, `/${value}`))
+                  }
+                }}
+              >
+                {languageOptions.map((option) => (
+                  <DropdownMenuRadioItem key={option.locale} value={option.locale}>
+                    {option.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <ThemeToggle />
           <Button
             variant="ghost"

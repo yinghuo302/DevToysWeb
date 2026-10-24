@@ -6,7 +6,13 @@ import { useLocale } from '@/components/locale-provider'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRecentTools } from '@/hooks/use-recent-tools'
-import { categoryOrder as categories, type ToolCategory, tools } from '@/libs/domain/catalog'
+import {
+  categoryOrder as categories,
+  getToolDescription,
+  getToolTitle,
+  type ToolCategory,
+  tools,
+} from '@/libs/domain/catalog'
 import { cn } from '@/libs/utils'
 import { ToolCard } from './tool-card'
 
@@ -42,7 +48,7 @@ export const ToolDashboard = () => {
       tools.filter(
         (tool) =>
           (activeCategory === 'all' || tool.category === activeCategory) &&
-          `${tool.title[locale]} ${tool.description[locale]}`
+          `${getToolTitle(tool, locale)} ${getToolDescription(tool, locale)}`
             .toLowerCase()
             .includes(query.trim().toLowerCase()),
       ),

@@ -4,7 +4,7 @@ This file is the operating guide for coding agents working in this repository.
 
 ## Repository overview
 
-DevToysWeb is a pnpm/Turborepo monorepo for a bilingual developer-tool website.
+DevToysWeb is a pnpm/Turborepo monorepo for a localized developer-tool website supporting Japanese, English, and Simplified Chinese.
 
 - `apps/web`: Next.js App Router frontend, statically exported for S3/CloudFront
 - `apps/api`: Hono handlers deployed as an AWS Lambda
@@ -49,7 +49,7 @@ when renaming a package.
 - Cross-cutting components and hooks used by more than one feature
   (locale/theme providers, `useTranslate`): `apps/web/src/components/` and
   `apps/web/src/hooks/`
-- Japanese and English shared copy: `apps/web/src/i18n/dictionaries.ts`
+- Japanese, English, and Simplified Chinese shared copy: `apps/web/src/i18n/dictionaries.ts`
 - Canonical URLs, `hreflang`, Open Graph, and JSON-LD:
   `apps/web/src/features/seo/`; the sitemap and robots routes live in
   `apps/web/src/app/sitemap.ts` and `apps/web/src/app/robots.ts`
@@ -59,7 +59,7 @@ when renaming a package.
   `s-yoshiki/aws-terraform`; this repository only consumes their ARNs through
   GitHub Environment Variables.
 
-When adding a tool, update the catalog and both locales together. Reuse an existing
+When adding a tool, update the catalog and all supported locales together. Reuse an existing
 workspace when possible; otherwise extend the `workspace` union, add a flat
 `workspaces/<workspace>/` folder (`<workspace>-workspace.tsx` plus `use-<workspace>.ts`),
 and register the component in `workspaces/registry.ts`. Keep state and derivation in the
@@ -77,7 +77,7 @@ secret material, or server-side trust boundaries in the API.
 - Follow the existing Biome style: two spaces, single quotes, no semicolons, 100 columns.
 - Use the existing shadcn/Base UI components and Tailwind tokens before adding dependencies
   or custom primitives.
-- User-facing shared text must be supplied in both Japanese and English.
+- User-facing shared text must be supplied in every supported locale (Japanese, English, and Simplified Chinese).
 - Network diagnostics must retain SSRF protections in `apps/api/src/network.ts`.
 - Never deploy, bootstrap CDK, change cloud resources, or add secrets unless explicitly asked.
 

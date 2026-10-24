@@ -36,7 +36,15 @@ const LocaleLayout = async ({
             className="border-t border-border px-4 py-6 text-xs text-muted-foreground sm:px-6"
           >
             <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
-              <nav aria-label={locale === 'ja' ? 'サイト情報' : 'Site information'}>
+              <nav
+                aria-label={
+                  locale === 'ja'
+                    ? 'サイト情報'
+                    : locale === 'zh-CN'
+                      ? '网站信息'
+                      : 'Site information'
+                }
+              >
                 <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2">
                   {contentPageLinks.map((link) => (
                     <li key={link.slug}>

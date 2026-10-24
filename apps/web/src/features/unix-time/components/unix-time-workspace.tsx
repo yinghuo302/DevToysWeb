@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { intlLocale } from '@/i18n/dictionaries'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -37,7 +38,7 @@ export const UnixTimeWorkspace = ({ tool }: WorkspaceProps) => {
     { label: t('UTC 表記', 'UTC string'), value: date.toUTCString() },
     {
       label: t('ローカル日時', 'Local time'),
-      value: date.toLocaleString(locale === 'ja' ? 'ja-JP' : 'en-US'),
+      value: date.toLocaleString(intlLocale(locale)),
     },
     { label: t('曜日', 'Weekday'), value: weekday(date, locale), mono: false },
     { label: t('通算日', 'Day of year'), value: String(dayOfYear(date)) },
@@ -93,10 +94,10 @@ export const UnixTimeWorkspace = ({ tool }: WorkspaceProps) => {
         <Card className="overflow-hidden border-primary/30 bg-accent/20 shadow-xl shadow-foreground/[0.03]">
           <CardContent className="p-5 text-center">
             <p className="font-mono text-2xl font-bold tracking-tight sm:text-3xl">
-              {date.toLocaleString(locale === 'ja' ? 'ja-JP' : 'en-US')}
+              {date.toLocaleString(intlLocale(locale))}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {localOffsetLabel(date)} · {relativeTime(date, locale === 'ja' ? 'ja-JP' : 'en-US')}
+              {localOffsetLabel(date)} · {relativeTime(date, intlLocale(locale))}
             </p>
           </CardContent>
         </Card>

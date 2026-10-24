@@ -1,12 +1,15 @@
-import type { Locale } from '@/i18n/dictionaries'
-import { locales } from '@/i18n/dictionaries'
+import { defaultLocale, locales, type Locale } from '@/i18n/dictionaries'
 
 // Production origin served by CloudFront. Keep in sync with `hostedZoneName`
 // in scripts/infra/bin/infra.ts.
 export const siteUrl = 'https://devtoys.ex-foundry.com'
 export const siteName = 'DevToys'
 
-export const ogLocales: Record<Locale, string> = { ja: 'ja_JP', en: 'en_US' }
+export const ogLocales: Record<Locale, string> = {
+  ja: 'ja_JP',
+  en: 'en_US',
+  'zh-CN': 'zh_CN',
+}
 
 // A pre-rendered file rather than a `next/og` route: the static export writes
 // image routes without a file extension, and `aws s3 sync` would then serve
@@ -36,6 +39,6 @@ export const alternatesFor = (locale: Locale, path = '') => {
 
   return {
     canonical: absoluteUrl(`${locale}${suffix}`),
-    languages: { ...languages, 'x-default': absoluteUrl(`ja${suffix}`) },
+    languages: { ...languages, 'x-default': absoluteUrl(`${defaultLocale}${suffix}`) },
   }
 }

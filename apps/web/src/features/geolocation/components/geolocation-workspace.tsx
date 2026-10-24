@@ -2,6 +2,8 @@
 
 import { Crosshair, ExternalLink, MapPin } from 'lucide-react'
 import { CopyButton } from '@/components/copy-button'
+import { useLocale } from '@/components/locale-provider'
+import { intlLocale } from '@/i18n/dictionaries'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { WorkspaceShell } from '@/components/workspace-shell'
@@ -33,6 +35,7 @@ const formatValue = (value: number | null, digits: number, unit: string) =>
   value === null ? '—' : `${value.toFixed(digits)}${unit}`
 
 export const GeolocationWorkspace = ({ tool }: WorkspaceProps) => {
+  const { locale } = useLocale()
   const t = useTranslate()
   const geo = useGeolocation()
 
@@ -49,7 +52,7 @@ export const GeolocationWorkspace = ({ tool }: WorkspaceProps) => {
     { label: t('速度', 'Speed'), value: formatValue(coords.speed, 1, ' m/s') },
     {
       label: t('取得時刻', 'Timestamp'),
-      value: new Date(coords.timestamp).toLocaleString(),
+      value: new Date(coords.timestamp).toLocaleString(intlLocale(locale)),
     },
   ]
 

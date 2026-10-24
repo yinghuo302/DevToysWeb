@@ -1,19 +1,24 @@
 import type { ContentPageLinkKey, ContentPageSlug } from '@/features/content/domain/page-slugs'
+import { chineseContentPages } from './chinese-content-pages'
 
-export const locales = ['ja', 'en'] as const
+export const locales = ['ja', 'en', 'zh-CN'] as const
 export type Locale = (typeof locales)[number]
+export const defaultLocale: Locale = 'zh-CN'
+export type LegacyLocale = Exclude<Locale, 'zh-CN'>
+export const intlLocale = (locale: Locale): string =>
+  ({ ja: 'ja-JP', en: 'en-US', 'zh-CN': 'zh-CN' })[locale]
 
 type ContentSection = {
   heading: string
-  paragraphs?: readonly string[]
-  items?: readonly string[]
+  paragraphs?: string[]
+  items?: string[]
 }
 
-type ContentPageCopy = {
+export type ContentPageCopy = {
   eyebrow: string
   title: string
   description: string
-  sections: readonly ContentSection[]
+  sections: ContentSection[]
   action?: { label: string; href: string }
 }
 
@@ -650,6 +655,99 @@ const dictionaries = {
   },
 } as const
 
-export const getDictionary = (locale: Locale) => dictionaries[locale]
-export type Dictionary = ReturnType<typeof getDictionary>
+type Widen<Value> = Value extends string
+  ? string
+  : Value extends readonly (infer Entry)[]
+    ? Widen<Entry>[]
+    : Value extends object
+      ? { [Key in keyof Value]: Widen<Value[Key]> }
+      : Value
+export type Dictionary = Widen<(typeof dictionaries)['en']>
+
+const chineseDictionaryOverrides: Partial<Dictionary> = {
+  appName: 'DevToys',
+  tagline: '开发日常，轻松一点。',
+  heroDescription: '把常用的小工具汇集到一个安静、快速的浏览器工作空间。',
+  allTools: '全部工具',
+  popularTools: '热门工具',
+  browseByCategory: '按类别浏览',
+  toolCount: '个开发工具，即开即用',
+  noToolsFound: '没有找到符合条件的工具',
+  resetFilters: '清除筛选',
+  search: '搜索工具',
+  input: '输入',
+  output: '输出',
+  copy: '复制',
+  copied: '已复制',
+  clear: '清空',
+  generate: '生成',
+  run: '运行',
+  theme: '主题',
+  language: '语言',
+  commandPalette: '命令面板',
+  commandPalettePlaceholder: '按工具名称或关键词搜索…',
+  recentTools: '最近使用',
+  sample: '示例',
+  share: '分享链接',
+  shared: '链接已复制',
+  collapseSidebar: '折叠侧边栏',
+  expandSidebar: '展开侧边栏',
+  maximizeWorkspace: '最大化工具区域',
+  restoreWorkspace: '还原工具区域',
+  howToUse: '使用方法',
+  cautions: '注意事项',
+  enterBrowserFullscreen: '进入浏览器全屏模式',
+  exitBrowserFullscreen: '退出浏览器全屏模式',
+  notFoundTitle: '找不到页面',
+  notFoundDescription: '页面可能已移动或删除，请从工具列表中查找。',
+  backToHome: '返回首页',
+  goBack: '返回上一页',
+  popularDestinations: '常用工具',
+  skipToContent: '跳转到主要内容',
+  mainNavigation: '工具导航',
+  openMenu: '打开菜单',
+  toolsFound: '个工具符合条件',
+  filterByCategory: '按类别筛选',
+  clearSearch: '清除搜索',
+  switchLanguage: '切换语言',
+  switchToLight: '切换到浅色主题',
+  switchToDark: '切换到深色主题',
+  githubRepository: 'GitHub 仓库（在新标签页中打开）',
+  footerNote: '为日常开发准备的小工具箱。',
+  contentPages: chineseContentPages as unknown as Dictionary['contentPages'],
+  sitePages: {
+    aboutApp: '关于应用',
+    howToUsePage: '使用指南',
+    developerGuide: '开发者指南',
+    operator: '运营者信息',
+    privacy: '隐私政策',
+    terms: '使用条款',
+    contact: '联系',
+  },
+  categories: {
+    search: '自定义搜索',
+    converters: '格式转换',
+    calculators: '计算器',
+    time: '时间',
+    encoders: '编码与解码',
+    formatters: '格式化',
+    generators: '生成器',
+    testers: '测试工具',
+    text: '文本',
+    images: '图像',
+    network: '网络',
+    device: '设备',
+  },
+}
+
+export const getDictionary = (locale: Locale): Dictionary => {
+  if (locale === 'zh-CN') return { ...dictionaries.en, ...chineseDictionaryOverrides }
+  return dictionaries[locale] as Dictionary
+}
+
 export const isLocale = (value: string): value is Locale => locales.includes(value as Locale)
+
+export const getLegacyLocale = (locale: Locale): LegacyLocale => {
+  if (locale === 'zh-CN') return 'en'
+  return locale
+}

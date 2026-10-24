@@ -9,7 +9,11 @@ export const ContentPage = ({ locale, slug }: { locale: Locale; slug: ContentPag
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-      <nav aria-label={locale === 'ja' ? 'パンくずリスト' : 'Breadcrumb'}>
+      <nav
+        aria-label={
+          locale === 'ja' ? 'パンくずリスト' : locale === 'zh-CN' ? '面包屑导航' : 'Breadcrumb'
+        }
+      >
         <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
           <li>
             <Link href={`/${locale}/`} className="transition-colors hover:text-foreground">
@@ -78,10 +82,16 @@ export const ContentPage = ({ locale, slug }: { locale: Locale; slug: ContentPag
 
       <nav
         className="mt-12 border-t border-border pt-8"
-        aria-label={locale === 'ja' ? '関連ページ' : 'Related pages'}
+        aria-label={
+          locale === 'ja' ? '関連ページ' : locale === 'zh-CN' ? '相关页面' : 'Related pages'
+        }
       >
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          {locale === 'ja' ? '関連ページ' : 'More from DevToys'}
+          {locale === 'ja'
+            ? '関連ページ'
+            : locale === 'zh-CN'
+              ? '更多 DevToys 内容'
+              : 'More from DevToys'}
         </p>
         <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {contentPageLinks.map((link) => (

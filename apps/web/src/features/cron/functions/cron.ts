@@ -55,45 +55,45 @@ const specs: Record<CronFieldName, FieldSpec> = {
   second: {
     min: 0,
     max: 59,
-    label: { ja: '秒', en: 'Second' },
-    noun: { ja: '秒', en: 'second' },
+    label: { ja: '秒', en: 'Second', 'zh-CN': '秒' },
+    noun: { ja: '秒', en: 'second', 'zh-CN': '秒' },
     stepUnit: '秒',
   },
   minute: {
     min: 0,
     max: 59,
-    label: { ja: '分', en: 'Minute' },
-    noun: { ja: '分', en: 'minute' },
+    label: { ja: '分', en: 'Minute', 'zh-CN': '分钟' },
+    noun: { ja: '分', en: 'minute', 'zh-CN': '分钟' },
     stepUnit: '分',
   },
   hour: {
     min: 0,
     max: 23,
-    label: { ja: '時', en: 'Hour' },
-    noun: { ja: '時', en: 'hour' },
+    label: { ja: '時', en: 'Hour', 'zh-CN': '小时' },
+    noun: { ja: '時', en: 'hour', 'zh-CN': '小时' },
     stepUnit: '時間',
   },
   dayOfMonth: {
     min: 1,
     max: 31,
-    label: { ja: '日', en: 'Day of month' },
-    noun: { ja: '日', en: 'day-of-month' },
+    label: { ja: '日', en: 'Day of month', 'zh-CN': '日' },
+    noun: { ja: '日', en: 'day-of-month', 'zh-CN': '日' },
     stepUnit: '日',
   },
   month: {
     min: 1,
     max: 12,
     names: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-    label: { ja: '月', en: 'Month' },
-    noun: { ja: '月', en: 'month' },
+    label: { ja: '月', en: 'Month', 'zh-CN': '月' },
+    noun: { ja: '月', en: 'month', 'zh-CN': '月' },
     stepUnit: 'か月',
   },
   dayOfWeek: {
     min: 0,
     max: 7,
     names: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-    label: { ja: '曜日', en: 'Day of week' },
-    noun: { ja: '曜日', en: 'day-of-week' },
+    label: { ja: '曜日', en: 'Day of week', 'zh-CN': '星期' },
+    noun: { ja: '曜日', en: 'day-of-week', 'zh-CN': '星期' },
     stepUnit: '',
   },
 }
@@ -122,6 +122,20 @@ export const cronMacros: Record<string, string> = {
 }
 
 const monthNames: Record<Locale, string[]> = {
+  'zh-CN': [
+    '一月',
+    '二月',
+    '三月',
+    '四月',
+    '五月',
+    '六月',
+    '七月',
+    '八月',
+    '九月',
+    '十月',
+    '十一月',
+    '十二月',
+  ],
   en: [
     'January',
     'February',
@@ -142,6 +156,7 @@ const monthNames: Record<Locale, string[]> = {
 const dayNames: Record<Locale, string[]> = {
   en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   ja: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+  'zh-CN': ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
 }
 
 const pad = (value: number) => String(value).padStart(2, '0')
@@ -252,7 +267,7 @@ const valueLabel = (name: CronFieldName, value: number, locale: Locale) => {
   if (name === 'month') return monthNames[locale][value - specs.month.min]
   if (name === 'dayOfWeek') return dayName(value, locale)
   if (locale === 'en') return String(value)
-  return `${value}${specs[name].noun.ja}`
+  return `${value}${specs[name].noun[locale]}`
 }
 
 const termPhraseEn = (name: CronFieldName, term: CronTerm): string => {
@@ -317,14 +332,50 @@ const termPhraseJa = (name: CronFieldName, term: CronTerm): string => {
   }
 }
 
+const termPhraseZh = (name: CronFieldName, term: CronTerm): string => {
+  const spec = specs[name]
+  const noun = spec.noun['zh-CN']
+  const label = (value: number) => valueLabel(name, value, 'zh-CN')
+  switch (term.kind) {
+    case 'all':
+    case 'blank':
+      if (name === 'dayOfWeek') return '每天'
+      if (name === 'dayOfMonth') return '每天'
+      return `每${noun}`
+    case 'single':
+      return name === 'month' || name === 'dayOfWeek' ? label(term.value) : `${term.value}${noun}`
+    case 'range':
+      return `${label(term.from)}至${label(term.to)}`
+    case 'step':
+      if (term.step === 1) {
+        return term.whole ? `每${noun}` : `${label(term.from)}至${label(term.to)}每${noun}`
+      }
+      return term.whole
+        ? `每${term.step}${noun}`
+        : `${label(term.from)}至${label(term.to)}每${term.step}${noun}`
+    case 'lastDayOfMonth':
+      return term.offset === 0 ? '月末' : `月末前${term.offset}天`
+    case 'nearestWeekday':
+      return `${term.value}日最近的工作日`
+    case 'lastWeekday':
+      return `本月最后一个${dayName(term.value, 'zh-CN')}`
+    case 'nthWeekday':
+      return `本月第${term.nth}个${dayName(term.value, 'zh-CN')}`
+  }
+}
+
 const joinEn = (parts: string[]) =>
   parts.length < 2 ? (parts[0] ?? '') : `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`
 
+const localizedTermPhrase = (name: CronFieldName, term: CronTerm, locale: Locale) => {
+  if (locale === 'ja') return termPhraseJa(name, term)
+  if (locale === 'zh-CN') return termPhraseZh(name, term)
+  return termPhraseEn(name, term)
+}
+
 const fieldPhrase = (name: CronFieldName, terms: CronTerm[], locale: Locale) => {
-  const phrases = terms.map((term) =>
-    locale === 'ja' ? termPhraseJa(name, term) : termPhraseEn(name, term),
-  )
-  return locale === 'ja' ? phrases.join('、') : joinEn(phrases)
+  const phrases = terms.map((term) => localizedTermPhrase(name, term, locale))
+  return locale === 'en' ? joinEn(phrases) : phrases.join('、')
 }
 
 /** True when the field places no restriction on the schedule. */
@@ -426,6 +477,44 @@ const describeJa = (parsed: Parsed, hasSeconds: boolean) => {
   return `${head}に実行`
 }
 
+const describeZh = (parsed: Parsed, hasSeconds: boolean) => {
+  const clock = clockTime(parsed, hasSeconds)
+  const smallest: CronFieldName = hasSeconds ? 'second' : 'minute'
+  const larger: CronFieldName[] = hasSeconds ? ['minute', 'hour'] : ['hour']
+  const timeParts = clock ? [clock] : [fieldPhrase(smallest, parsed[smallest] ?? [], 'zh-CN')]
+
+  if (!clock) {
+    for (const name of larger) {
+      const terms = parsed[name] ?? []
+      if (!isOpen(terms)) timeParts.push(fieldPhrase(name, terms, 'zh-CN'))
+    }
+  }
+
+  const month = parsed.month ?? []
+  const dayOfMonth = parsed.dayOfMonth ?? []
+  const dayOfWeek = parsed.dayOfWeek ?? []
+  const monthRestricted = !isOpen(month)
+  const dayOfMonthRestricted = !isOpen(dayOfMonth)
+  const dayOfWeekRestricted = !isOpen(dayOfWeek)
+  const calendarParts: string[] = []
+
+  if (clock && !monthRestricted && !dayOfMonthRestricted && !dayOfWeekRestricted) {
+    calendarParts.push('每天')
+  }
+  if (monthRestricted) calendarParts.push(`每年${fieldPhrase('month', month, 'zh-CN')}`)
+  if (dayOfMonthRestricted && dayOfWeekRestricted) {
+    calendarParts.push(
+      `每月${fieldPhrase('dayOfMonth', dayOfMonth, 'zh-CN')}或${fieldPhrase('dayOfWeek', dayOfWeek, 'zh-CN')}`,
+    )
+  } else if (dayOfMonthRestricted) {
+    calendarParts.push(`每月${fieldPhrase('dayOfMonth', dayOfMonth, 'zh-CN')}`)
+  } else if (dayOfWeekRestricted) {
+    calendarParts.push(`每周${fieldPhrase('dayOfWeek', dayOfWeek, 'zh-CN')}`)
+  }
+
+  return `${[...calendarParts, ...timeParts].join('，')}执行`
+}
+
 const expandValues = (name: CronFieldName, terms: CronTerm[], locale: Locale) => {
   const spec = specs[name]
   const numbers = new Set<number>()
@@ -448,14 +537,15 @@ const expandValues = (name: CronFieldName, terms: CronTerm[], locale: Locale) =>
         for (let value = term.from; value <= term.to; value += term.step) numbers.add(value)
         break
       default:
-        specials.push(locale === 'ja' ? termPhraseJa(name, term) : termPhraseEn(name, term))
+        specials.push(localizedTermPhrase(name, term, locale))
     }
   }
 
-  if (everything && !specials.length)
-    return locale === 'ja'
-      ? `すべて (${spec.min}-${spec.max})`
-      : `every value (${spec.min}-${spec.max})`
+  if (everything && !specials.length) {
+    if (locale === 'ja') return `すべて (${spec.min}-${spec.max})`
+    if (locale === 'zh-CN') return `所有值（${spec.min}-${spec.max}）`
+    return `every value (${spec.min}-${spec.max})`
+  }
 
   // 7 and 0 are the same weekday; showing both would overstate the schedule.
   const listed = [...numbers]
@@ -467,7 +557,7 @@ const expandValues = (name: CronFieldName, terms: CronTerm[], locale: Locale) =>
     )
 
   const shown = listed.length > 12 ? [...listed.slice(0, 12), '…'] : listed
-  return [...shown, ...specials].join(locale === 'ja' ? '、' : ', ')
+  return [...shown, ...specials].join(locale === 'en' ? ', ' : '、')
 }
 
 export const expandCronExpression = (input: string) => {
@@ -510,6 +600,7 @@ export const analyzeCron = (input: string): CronAnalysis => {
       description: {
         ja: fieldPhrase(name, terms, 'ja'),
         en: fieldPhrase(name, terms, 'en'),
+        'zh-CN': fieldPhrase(name, terms, 'zh-CN'),
       },
     } satisfies CronField
   })
@@ -520,11 +611,16 @@ export const analyzeCron = (input: string): CronAnalysis => {
     normalized,
     hasSeconds,
     fields,
-    description: { ja: describeJa(parsed, hasSeconds), en: describeEn(parsed, hasSeconds) },
+    description: {
+      ja: describeJa(parsed, hasSeconds),
+      en: describeEn(parsed, hasSeconds),
+      'zh-CN': describeZh(parsed, hasSeconds),
+    },
     note: bothDays
       ? {
           ja: '日と曜日の両方を指定した場合、cronは「どちらかに一致した日」に実行します。',
           en: 'When both day-of-month and day-of-week are restricted, cron runs on days matching either field.',
+          'zh-CN': '同时限制“日”和“星期”字段时，Cron 会在匹配任一字段的日期运行。',
         }
       : null,
   }

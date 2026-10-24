@@ -11,7 +11,7 @@ export type EmojiCategory =
 
 export type EmojiEntry = {
   emoji: string
-  name: { ja: string; en: string }
+  name: { ja: string; en: string; zh: string }
   keywords: string[]
   category: EmojiCategory
 }

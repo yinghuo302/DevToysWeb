@@ -6,7 +6,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useLocale } from '@/components/locale-provider'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { useRecentTools } from '@/hooks/use-recent-tools'
-import { type ToolDefinition, tools } from '@/libs/domain/catalog'
+import { getToolDescription, getToolTitle, type ToolDefinition, tools } from '@/libs/domain/catalog'
 import { getToolPath } from '@/libs/domain/tool-path'
 import { cn } from '@/libs/utils'
 
@@ -143,9 +143,9 @@ export const CommandPalette = ({
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-foreground">
-                  {tool.title[locale]}
+                  {getToolTitle(tool, locale)}
                 </span>
-                <span className="block truncate text-xs">{tool.description[locale]}</span>
+                <span className="block truncate text-xs">{getToolDescription(tool, locale)}</span>
               </span>
               <span className="hidden shrink-0 text-[11px] uppercase tracking-wider sm:block">
                 {dictionary.categories[tool.category]}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale } from '@/components/locale-provider'
+import { getToolTitle } from '@/libs/domain/catalog'
 import { Card, CardContent } from '@/components/ui/card'
 import { ErrorBanner } from '@/components/workspace-panes'
 import { WorkspaceShell } from '@/components/workspace-shell'
@@ -38,7 +39,7 @@ export const ConverterWorkspace = ({ tool }: WorkspaceProps) => {
             {!converter.isGenerator && <InputPane converter={converter} />}
             <OutputPane
               converter={converter}
-              label={converter.isGenerator ? tool.title[locale] : converter.outputFormat}
+              label={converter.isGenerator ? getToolTitle(tool, locale) : converter.outputFormat}
             />
           </div>
         </CardContent>

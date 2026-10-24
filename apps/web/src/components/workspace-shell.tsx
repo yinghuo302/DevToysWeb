@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { WorkspaceGuide } from '@/components/workspace-guide'
 import { useFullscreen } from '@/hooks/use-fullscreen'
-import type { ToolDefinition } from '@/libs/domain/catalog'
+import { getToolDescription, getToolTitle, type ToolDefinition } from '@/libs/domain/catalog'
 import { cn } from '@/libs/utils'
 
 /**
@@ -58,10 +58,12 @@ export const WorkspaceShell = ({
                   maximized ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl',
                 )}
               >
-                {tool.title[locale]}
+                {getToolTitle(tool, locale)}
               </h1>
               {!maximized && (
-                <p className="mt-1 text-sm text-muted-foreground">{tool.description[locale]}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {getToolDescription(tool, locale)}
+                </p>
               )}
             </div>
           </div>

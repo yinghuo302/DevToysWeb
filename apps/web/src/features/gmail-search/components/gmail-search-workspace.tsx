@@ -29,7 +29,7 @@ export const GmailSearchWorkspace = ({ tool }: WorkspaceProps) => {
             <SectionHeading>{t('送受信者', 'People')}</SectionHeading>
             <TextField
               id={`${fieldId}-m-from`}
-              label={t('送信者', 'From')}
+              label={t('送信者', 'From', '发件人')}
               placeholder="amy@example.com"
               hint={t(
                 '複数はスペースかカンマで区切り、いずれかに一致します',
@@ -40,7 +40,7 @@ export const GmailSearchWorkspace = ({ tool }: WorkspaceProps) => {
             />
             <TextField
               id={`${fieldId}-m-to`}
-              label={t('宛先', 'To')}
+              label={t('宛先', 'To', '收件人')}
               placeholder="me@example.com"
               value={condition.to}
               onChange={(value) => set('to', value)}

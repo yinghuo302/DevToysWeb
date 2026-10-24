@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
-    "mock:init": "msw init public/ --save"
+    "mock:init": "msw init public/ --save",
+    "generate:emoji-catalog": "node scripts/generate-emoji-catalog.mjs --write && biome format --write src/features/emoji/functions/emoji-catalog.generated.ts"
   },
   "msw": {
     "workerDirectory": [

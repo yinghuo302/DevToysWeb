@@ -3,6 +3,7 @@
 import { Type } from 'lucide-react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,6 +15,8 @@ import { useFancyText } from '../hooks/use-fancy-text'
 export const FancyTextWorkspace = ({ tool }: WorkspaceProps) => {
   const { locale } = useLocale()
   const t = useTranslate()
+  const localizeStyle = (name: { ja: string; en: string }) =>
+    locale === 'zh-CN' ? (getChineseCopy(name.en) ?? name.en) : name[locale]
   const fancyText = useFancyText()
 
   return (
@@ -59,7 +62,7 @@ export const FancyTextWorkspace = ({ tool }: WorkspaceProps) => {
               >
                 <div className="min-w-0">
                   <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {result.name[locale]}
+                    {localizeStyle(result.name)}
                   </p>
                   <p className="break-all text-lg leading-relaxed">{result.output}</p>
                 </div>

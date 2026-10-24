@@ -4,6 +4,7 @@ import { ArrowRight, CalendarClock } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { intlLocale, type Locale } from '@/i18n/dictionaries'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -52,9 +53,9 @@ export const DateCalcWorkspace = ({ tool }: WorkspaceProps) => {
 }
 
 type Calc = ReturnType<typeof useDateCalc>
-type T = (ja: string, en: string) => string
+type T = (ja: string, en: string, zh?: string) => string
 
-const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; t: T }) => {
+const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: Locale; t: T }) => {
   const fieldId = useId()
   const diff = calc.difference?.result
 
@@ -62,7 +63,7 @@ const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; 
     <div>
       <div className="grid gap-5 border-b bg-muted/20 p-5 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor={`${fieldId}-date-from`}>{t('開始日時', 'From')}</Label>
+          <Label htmlFor={`${fieldId}-date-from`}>{t('開始日時', 'From', '开始日期')}</Label>
           <Input
             id={`${fieldId}-date-from`}
             type="datetime-local"
@@ -72,7 +73,7 @@ const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; 
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor={`${fieldId}-date-to`}>{t('終了日時', 'To')}</Label>
+            <Label htmlFor={`${fieldId}-date-to`}>{t('終了日時', 'To', '结束日期')}</Label>
             <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={calc.setToNow}>
               {t('現在', 'Now')}
             </Button>
@@ -96,12 +97,30 @@ const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; 
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <Stat label={t('合計日数', 'Total days')} value={diff.totalDays.toLocaleString()} />
-            <Stat label={t('合計週数', 'Total weeks')} value={diff.totalWeeks.toLocaleString()} />
-            <Stat label={t('平日数', 'Weekdays')} value={diff.businessDays.toLocaleString()} />
-            <Stat label={t('合計時間', 'Total hours')} value={diff.totalHours.toLocaleString()} />
-            <Stat label={t('合計分', 'Total minutes')} value={diff.totalMinutes.toLocaleString()} />
-            <Stat label={t('合計秒', 'Total seconds')} value={diff.totalSeconds.toLocaleString()} />
+            <Stat
+              label={t('合計日数', 'Total days')}
+              value={diff.totalDays.toLocaleString(intlLocale(locale))}
+            />
+            <Stat
+              label={t('合計週数', 'Total weeks')}
+              value={diff.totalWeeks.toLocaleString(intlLocale(locale))}
+            />
+            <Stat
+              label={t('平日数', 'Weekdays')}
+              value={diff.businessDays.toLocaleString(intlLocale(locale))}
+            />
+            <Stat
+              label={t('合計時間', 'Total hours')}
+              value={diff.totalHours.toLocaleString(intlLocale(locale))}
+            />
+            <Stat
+              label={t('合計分', 'Total minutes')}
+              value={diff.totalMinutes.toLocaleString(intlLocale(locale))}
+            />
+            <Stat
+              label={t('合計秒', 'Total seconds')}
+              value={diff.totalSeconds.toLocaleString(intlLocale(locale))}
+            />
           </div>
         </div>
       ) : (
@@ -111,7 +130,7 @@ const DifferenceView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; 
   )
 }
 
-const AddView = ({ calc, locale, t }: { calc: Calc; locale: 'ja' | 'en'; t: T }) => {
+const AddView = ({ calc, locale, t }: { calc: Calc; locale: Locale; t: T }) => {
   const fieldId = useId()
   const fields: { key: keyof DurationParts; label: string }[] = [
     { key: 'years', label: t('年', 'Years') },
@@ -214,25 +233,29 @@ const Stat = ({ label, value }: { label: string; value: string }) => (
   </div>
 )
 
-const formatBreakdown = (
-  diff: NonNullable<Calc['difference']>['result'],
-  locale: 'ja' | 'en',
-  t: T,
-) => {
+const formatBreakdown = (diff: NonNullable<Calc['difference']>['result'], locale: Locale, t: T) => {
   if (diff.direction === 0) return t('同じ日時', 'Same moment')
-  const units =
-    locale === 'ja'
-      ? [
-          [diff.years, '年'],
-          [diff.months, 'か月'],
-          [diff.days, '日'],
-        ]
-      : [
-          [diff.years, diff.years === 1 ? ' year' : ' years'],
-          [diff.months, diff.months === 1 ? ' month' : ' months'],
-          [diff.days, diff.days === 1 ? ' day' : ' days'],
-        ]
-  const parts = units.filter(([value]) => (value as number) !== 0)
+  let units: [number, string][]
+  if (locale === 'ja') {
+    units = [
+      [diff.years, '年'],
+      [diff.months, 'か月'],
+      [diff.days, '日'],
+    ]
+  } else if (locale === 'zh-CN') {
+    units = [
+      [diff.years, '年'],
+      [diff.months, '个月'],
+      [diff.days, '天'],
+    ]
+  } else {
+    units = [
+      [diff.years, diff.years === 1 ? ' year' : ' years'],
+      [diff.months, diff.months === 1 ? ' month' : ' months'],
+      [diff.days, diff.days === 1 ? ' day' : ' days'],
+    ]
+  }
+  const parts = units.filter(([value]) => value !== 0)
   const shown = parts.length > 0 ? parts : [units[units.length - 1]]
-  return shown.map(([value, unit]) => `${value}${unit}`).join(locale === 'ja' ? '' : ', ')
+  return shown.map(([value, unit]) => `${value}${unit}`).join(locale === 'en' ? ', ' : '')
 }

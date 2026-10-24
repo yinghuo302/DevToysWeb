@@ -3,6 +3,7 @@
 import { BellRing, CircleAlert, Volume2 } from 'lucide-react'
 import { useId } from 'react'
 import { useLocale } from '@/components/locale-provider'
+import { intlLocale } from '@/i18n/dictionaries'
 import { SegmentedControl, ToggleRow } from '@/components/segmented-control'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,7 +37,7 @@ export const TimeSignalWorkspace = ({ tool }: WorkspaceProps) => {
             </span>
             <p className="text-sm text-muted-foreground">
               {signal.now
-                ? signal.now.toLocaleDateString(locale === 'ja' ? 'ja-JP' : 'en-US', {
+                ? signal.now.toLocaleDateString(intlLocale(locale), {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',

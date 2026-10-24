@@ -4,6 +4,7 @@ import { Check, Dices, Search, Smile } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -61,6 +62,12 @@ const categoryLabel = (
   }
   return labels[category]
 }
+
+const localizeBilingual = (copy: { ja: string; en: string }, locale: Locale) =>
+  locale === 'zh-CN' ? (getChineseCopy(copy.en) ?? copy.en) : copy[locale]
+
+const localizeKaomojiName = (name: { ja: string; en: string }, locale: Locale) =>
+  locale === 'zh-CN' && name.en === 'content' ? '满足' : localizeBilingual(name, locale)
 
 const OutputRow = ({ label, value }: { label: string; value: string }) => (
   <div className="border-b last:border-b-0">
@@ -125,11 +132,11 @@ const KaomojiTile = ({
       onFocus={() => onFocus(index)}
       onClick={() => onPick(item)}
       className={`relative flex min-h-20 flex-col items-center justify-center gap-1.5 overflow-hidden rounded-xl border p-2 text-center transition-colors hover:border-primary/60 hover:bg-accent/60 ${span} ${selected ? 'border-primary bg-accent' : 'border-border/70 bg-background'}`}
-      title={item.name[locale]}
+      title={localizeKaomojiName(item.name, locale)}
     >
       <span className={`max-w-full whitespace-nowrap leading-none ${font}`}>{item.kaomoji}</span>
       <span className="max-w-full truncate text-[11px] text-muted-foreground">
-        {item.name[locale]}
+        {localizeKaomojiName(item.name, locale)}
       </span>
       {copied && (
         <span className="absolute inset-0 flex items-center justify-center gap-1 bg-primary/90 text-xs font-medium text-primary-foreground">
@@ -162,12 +169,12 @@ const PartSelect = <Part extends PairPart | SinglePart>({
       <Label htmlFor={id}>{label}</Label>
       <Select value={value} onValueChange={(next) => next && onChange(next)}>
         <SelectTrigger id={id} className="w-full">
-          <SelectValue>{active.label[locale]}</SelectValue>
+          <SelectValue>{localizeBilingual(active.label, locale)}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {parts.map((part) => (
             <SelectItem key={part.id} value={part.id}>
-              {part.label[locale]}
+              {localizeBilingual(part.label, locale)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -331,7 +338,9 @@ export const KaomojiWorkspace = ({ tool }: WorkspaceProps) => {
                 <div className="mt-4 space-y-2">
                   <p className="break-all text-2xl leading-snug">{kaomoji.selected.kaomoji}</p>
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{kaomoji.selected.name[locale]}</p>
+                    <p className="truncate font-medium">
+                      {localizeKaomojiName(kaomoji.selected.name, locale)}
+                    </p>
                     <div className="mt-1 flex flex-wrap gap-1">
                       <Badge variant="outline">{categoryLabel(kaomoji.selected.category, t)}</Badge>
                       <Badge variant="secondary">

@@ -6,6 +6,7 @@ import { querySelectorAll, type SelectorMode } from '@/features/selector/functio
 const sampleHtml = `<section class="hero" id="top">
   <h1 data-role="title">DevToys</h1>
   <ul class="links">
+    <li><a href="/zh-CN/">简体中文</a></li>
     <li><a href="/ja/">日本語</a></li>
     <li><a href="/en/">English</a></li>
   </ul>

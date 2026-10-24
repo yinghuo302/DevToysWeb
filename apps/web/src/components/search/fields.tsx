@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -129,10 +130,15 @@ export const SelectField = <Value extends string>({
   onChange: (value: Value) => void
 }) => {
   const { locale } = useLocale()
+  const optionLabel = (copy: Bilingual) =>
+    locale === 'zh-CN' ? (getChineseCopy(copy.en) ?? copy.en) : copy[locale]
   return (
     <Field id={id} label={label}>
       <Select
-        items={options.map((option) => ({ value: option.value, label: option.label[locale] }))}
+        items={options.map((option) => ({
+          value: option.value,
+          label: optionLabel(option.label),
+        }))}
         value={value}
         onValueChange={(next) => onChange((next as Value) ?? ('' as Value))}
       >
@@ -142,7 +148,7 @@ export const SelectField = <Value extends string>({
         <SelectContent>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
-              {option.label[locale]}
+              {optionLabel(option.label)}
             </SelectItem>
           ))}
         </SelectContent>

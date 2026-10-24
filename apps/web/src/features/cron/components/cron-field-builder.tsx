@@ -114,7 +114,7 @@ export const CronFieldBuilder = ({
         {spec.mode === 'range' && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <NumberBox
-              label={t('開始', 'From')}
+              label={t('開始', 'From', '起始值')}
               value={spec.from}
               onChange={(from) => update({ from })}
               min={bounds.min}
@@ -122,7 +122,7 @@ export const CronFieldBuilder = ({
             />
             <span>–</span>
             <NumberBox
-              label={t('終了', 'To')}
+              label={t('終了', 'To', '结束值')}
               value={spec.to}
               onChange={(to) => update({ to })}
               min={bounds.min}

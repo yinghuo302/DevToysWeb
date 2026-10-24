@@ -10,6 +10,12 @@ describe('tool paths', () => {
     assert.equal(getToolPath('en', tool), '/en/generators/qr-code-generator/')
   })
 
+  it('generates a static Chinese tool route with a trailing slash', () => {
+    const tool = findTool('qr-code')
+    assert.ok(tool)
+    assert.equal(getToolPath('zh-CN', tool), '/zh-CN/generators/qr-code-generator/')
+  })
+
   it('matches paths with or without a trailing slash', () => {
     assert.equal(
       isSamePath('/en/generators/qr-code-generator/', '/en/generators/qr-code-generator'),

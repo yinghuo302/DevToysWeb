@@ -11,5 +11,7 @@
 | ID | Decision | Status |
 | --- | --- | --- |
 | [0001](0001-repository-conventions.md) | ex-foundry リポジトリ規約 | Accepted |
+| [0002](0002-retain-replaced-acm-certificates.md) | Replaced ACM certificates are retained | Accepted |
+| [0003](0003-node-24-compatibility-and-chinese-localization.md) | Node 24 compatibility and Chinese localization | Accepted |
 
 テンプレート: [template.md](template.md)

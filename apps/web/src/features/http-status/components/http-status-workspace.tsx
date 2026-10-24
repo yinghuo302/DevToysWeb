@@ -4,6 +4,7 @@ import { Search } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { httpStatusChineseSummaries } from '@/i18n/http-status-translations'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -121,7 +122,9 @@ export const HttpStatusWorkspace = ({ tool }: WorkspaceProps) => {
                           )}
                         </p>
                         <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                          {status.summary[locale]}
+                          {locale === 'zh-CN'
+                            ? httpStatusChineseSummaries[status.code]
+                            : status.summary[locale]}
                         </p>
                         <p className="mt-1 font-mono text-xs text-muted-foreground">
                           {status.reference}

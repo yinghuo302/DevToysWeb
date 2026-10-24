@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/dictionaries'
+import type { LegacyLocale, Locale } from '@/i18n/dictionaries'
 
 /**
  * Per-tool "how to use" steps and cautionary notes shown in the collapsible
@@ -6,8 +6,8 @@ import type { Locale } from '@/i18n/dictionaries'
  * compact index; a tool without an entry simply renders no guide panel.
  */
 export type ToolGuide = {
-  usage: Record<Locale, string[]>
-  notes: Record<Locale, string[]>
+  usage: Record<LegacyLocale, string[]>
+  notes: Record<LegacyLocale, string[]>
 }
 
 export const toolGuides: Record<string, ToolGuide> = {

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import type { ContentPageSlug } from '@/features/content/domain/page-slugs'
 import { getDictionary, type Locale } from '@/i18n/dictionaries'
-import type { ToolDefinition } from '@/libs/domain/catalog'
+import { getToolTitle, type ToolDefinition } from '@/libs/domain/catalog'
 import { alternatesFor, ogImage, ogLocales, siteName } from './site'
 
 const baseKeywords: Record<Locale, string[]> = {
   ja: ['開発者ツール', 'オンラインツール', 'Webツール', '無料', 'ブラウザ完結', 'DevToys'],
   en: ['developer tools', 'online tools', 'web tools', 'free', 'browser based', 'DevToys'],
+  'zh-CN': ['开发者工具', '在线工具', '网页工具', '免费', '浏览器工具', 'DevToys'],
 }
 
 /**
@@ -21,7 +22,7 @@ export const toolDescription = (tool: ToolDefinition, locale: Locale) => {
 }
 
 const toolKeywords = (tool: ToolDefinition, locale: Locale) => [
-  tool.title[locale],
+  getToolTitle(tool, locale),
   ...tool.pathSlug.split('-'),
   ...baseKeywords[locale],
 ]
@@ -81,7 +82,7 @@ export const toolMetadata = (tool: ToolDefinition, locale: Locale): Metadata =>
   buildMetadata({
     locale,
     path: `${tool.category}/${tool.pathSlug}`,
-    title: tool.title[locale],
+    title: getToolTitle(tool, locale),
     description: toolDescription(tool, locale),
     keywords: toolKeywords(tool, locale),
   })

@@ -4,6 +4,7 @@ import { RefreshCw } from 'lucide-react'
 import { useId } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { SegmentedControl } from '@/components/segmented-control'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,6 +22,12 @@ export const TestDataWorkspace = ({ tool }: WorkspaceProps) => {
   const fieldId = useId()
   const { locale, dictionary } = useLocale()
   const t = useTranslate()
+  const localizeLabel = (label: { ja: string; en: string }) =>
+    locale === 'zh-CN' ? (getChineseCopy(label.en) ?? label.en) : label[locale]
+  const localizeFieldKey = (key: string) => {
+    const field = FIELD_DEFS.find((definition) => definition.key === key)
+    return field ? localizeLabel(field.label) : key
+  }
   const data = useTestData()
 
   return (
@@ -57,7 +64,7 @@ export const TestDataWorkspace = ({ tool }: WorkspaceProps) => {
                           : 'border-border bg-muted/30 text-muted-foreground hover:bg-muted',
                       )}
                     >
-                      {field.label[locale]}
+                      {localizeLabel(field.label)}
                     </button>
                   )
                 })}
@@ -128,7 +135,7 @@ export const TestDataWorkspace = ({ tool }: WorkspaceProps) => {
                           key={key}
                           className="whitespace-nowrap border-b border-border px-3 py-2 text-left font-medium"
                         >
-                          {FIELD_DEFS.find((f) => f.key === key)?.label[locale]}
+                          {localizeFieldKey(key)}
                         </th>
                       ))}
                     </tr>

@@ -2,6 +2,7 @@
 
 import { ExternalLink } from 'lucide-react'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -32,6 +33,8 @@ export const OptionGroup = <Value extends string>({
   onChange: (value: Value) => void
 }) => {
   const { locale } = useLocale()
+  const optionLabel = (copy: Bilingual) =>
+    locale === 'zh-CN' ? (getChineseCopy(copy.en) ?? copy.en) : copy[locale]
   return (
     <div className={cn(inline ? 'flex flex-wrap items-center justify-between gap-2' : 'space-y-2')}>
       <span className="text-sm font-medium">{label}</span>
@@ -47,7 +50,7 @@ export const OptionGroup = <Value extends string>({
             onClick={() => onChange(option.value)}
             className="h-7 px-3"
           >
-            {option.label[locale]}
+            {optionLabel(option.label)}
           </Button>
         ))}
       </fieldset>

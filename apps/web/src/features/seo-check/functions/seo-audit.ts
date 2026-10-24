@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/dictionaries'
+import type { LegacyLocale } from '@/i18n/dictionaries'
 import type { SiteReport } from '@/libs/api/diagnostics-client'
 
 export type CheckLevel = 'pass' | 'warn' | 'fail'
@@ -6,7 +6,7 @@ export type CheckLevel = 'pass' | 'warn' | 'fail'
 export type SeoCheck = {
   id: string
   group: 'basics' | 'content' | 'social' | 'technical'
-  label: Record<Locale, string>
+  label: Record<LegacyLocale, string>
   level: CheckLevel
   detail: string
 }

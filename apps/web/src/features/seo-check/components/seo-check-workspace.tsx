@@ -3,6 +3,7 @@
 import { Check, CircleAlert, LoaderCircle, Play, X } from 'lucide-react'
 import { useId } from 'react'
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -28,6 +29,8 @@ export const SeoCheckWorkspace = ({ tool }: WorkspaceProps) => {
   const fieldId = useId()
   const t = useTranslate()
   const { locale } = useLocale()
+  const localizeLabel = (label: { ja: string; en: string }) =>
+    locale === 'zh-CN' ? (getChineseCopy(label.en) ?? label.en) : label[locale]
   const page = usePageReport('SEO check failed')
 
   const checks = page.report ? auditSeo(page.report) : []
@@ -131,7 +134,7 @@ export const SeoCheckWorkspace = ({ tool }: WorkspaceProps) => {
                           <li key={item.id} className="flex items-start gap-3 px-5 py-3">
                             <span className="mt-0.5 shrink-0">{levelIcon[item.level]}</span>
                             <div className="min-w-0">
-                              <p className="text-sm font-medium">{item.label[locale]}</p>
+                              <p className="text-sm font-medium">{localizeLabel(item.label)}</p>
                               <p className="mt-0.5 break-words text-xs text-muted-foreground">
                                 {item.detail}
                               </p>

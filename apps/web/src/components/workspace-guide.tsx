@@ -2,6 +2,8 @@
 
 import { AlertTriangle, ChevronDown, ListChecks } from 'lucide-react'
 import { useLocale } from '@/components/locale-provider'
+import { getLegacyLocale } from '@/i18n/dictionaries'
+import { getChineseCopy } from '@/hooks/use-translate'
 import type { ToolDefinition } from '@/libs/domain/catalog'
 import { findToolGuide } from '@/libs/domain/tool-guides'
 
@@ -13,8 +15,13 @@ import { findToolGuide } from '@/libs/domain/tool-guides'
 export const WorkspaceGuide = ({ tool }: { tool: ToolDefinition }) => {
   const { locale, dictionary } = useLocale()
   const guide = findToolGuide(tool.slug)
-  const usage = guide?.usage[locale] ?? []
-  const notes = guide?.notes[locale] ?? []
+  const legacyLocale = getLegacyLocale(locale)
+  const usageSource = guide?.usage[legacyLocale] ?? []
+  const notesSource = guide?.notes[legacyLocale] ?? []
+  const localize = (lines: string[]) =>
+    locale === 'zh-CN' ? lines.map((line) => getChineseCopy(line) ?? line) : lines
+  const usage = localize(usageSource)
+  const notes = localize(notesSource)
   if (usage.length === 0 && notes.length === 0) return null
 
   return (

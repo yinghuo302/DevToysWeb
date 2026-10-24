@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale } from '@/components/locale-provider'
+import { getChineseCopy } from '@/hooks/use-translate'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { WorkspaceShell } from '@/components/workspace-shell'
 import { useTranslate } from '@/hooks/use-translate'
@@ -10,6 +11,8 @@ import { useDeviceInfo } from '../hooks/use-device-info'
 export const DeviceInfoWorkspace = ({ tool }: WorkspaceProps) => {
   const t = useTranslate()
   const { locale } = useLocale()
+  const localize = (copy: { ja: string; en: string }) =>
+    locale === 'zh-CN' ? (getChineseCopy(copy.en) ?? copy.en) : copy[locale]
   const groups = useDeviceInfo()
 
   return (
@@ -25,7 +28,7 @@ export const DeviceInfoWorkspace = ({ tool }: WorkspaceProps) => {
           {groups.map((group) => (
             <Card key={group.title.en}>
               <CardHeader className="border-b border-border py-3">
-                <CardTitle className="text-sm">{group.title[locale]}</CardTitle>
+                <CardTitle className="text-sm">{localize(group.title)}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <dl>
@@ -35,9 +38,11 @@ export const DeviceInfoWorkspace = ({ tool }: WorkspaceProps) => {
                       className="flex items-start justify-between gap-4 border-b border-border px-5 py-2.5 last:border-b-0"
                     >
                       <dt className="shrink-0 text-sm text-muted-foreground">
-                        {row.label[locale]}
+                        {localize(row.label)}
                       </dt>
-                      <dd className="break-all text-right font-mono text-sm">{row.value}</dd>
+                      <dd className="break-all text-right font-mono text-sm">
+                        {locale === 'zh-CN' ? (getChineseCopy(row.value) ?? row.value) : row.value}
+                      </dd>
                     </div>
                   ))}
                 </dl>
