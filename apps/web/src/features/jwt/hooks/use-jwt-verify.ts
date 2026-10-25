@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useApiRequest } from '@/hooks/use-api-request'
-import { type JwtVerifyRequest, verifyJwt } from '@/libs/api/diagnostics-client'
+import { useAsyncRequest } from '@/hooks/use-async-request'
+import { type JwtVerifyRequest, verifyJwt } from '../functions/verify-jwt'
 
 export const keyModes = ['jwks', 'publicKey', 'secret'] as const
 export type KeyMode = (typeof keyModes)[number]
 
-/** The API names the JWKS field `jwksUrl`; the UI mode stays `jwks`. */
+/** Map the selected key mode to the matching local verifier input. */
 const requestField: Record<KeyMode, keyof JwtVerifyRequest> = {
   jwks: 'jwksUrl',
   publicKey: 'publicKey',
@@ -20,7 +20,7 @@ export const useJwtVerify = () => {
   const [key, setKey] = useState('')
   const [issuer, setIssuer] = useState('')
   const [audience, setAudience] = useState('')
-  const request = useApiRequest(verifyJwt, 'JWT verification failed')
+  const request = useAsyncRequest(verifyJwt, 'JWT verification failed')
 
   /** Switching the key material invalidates whatever was typed for the old one. */
   const changeMode = (next: KeyMode) => {
@@ -29,7 +29,7 @@ export const useJwtVerify = () => {
   }
 
   const run = () =>
-    void request.run({
+    request.run({
       token,
       issuer: issuer || undefined,
       audience: audience || undefined,

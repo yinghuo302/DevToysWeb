@@ -17,7 +17,6 @@ import {
   Earth,
   FileCode2,
   FileImage,
-  FileSearch,
   FileText,
   FileType,
   Fingerprint,
@@ -121,7 +120,6 @@ export type ToolDefinition = {
     | 'hmac'
     | 'basic-auth'
     | 'text-diff'
-    | 'site-diagnostics'
     | 'color'
     | 'lorem'
     | 'string-escape'
@@ -137,7 +135,6 @@ export type ToolDefinition = {
     | 'github-search'
     | 'whois'
     | 'ogp-check'
-    | 'seo-check'
     | 'badge'
     | 'emoji'
     | 'geolocation'
@@ -1103,29 +1100,15 @@ export const tools: ToolDefinition[] = [
     workspace: 'url-parser',
   },
   {
-    slug: 'site-diagnostics',
-    emoji: '🩺',
-    pathSlug: 'dns-tls-http-ogp-diagnostics',
-    category: 'network',
-    icon: Network,
-    title: { ja: 'DNS・TLS・HTTP診断', en: 'DNS, TLS & HTTP diagnostics' },
-    description: {
-      ja: 'ドメインとWebページをまとめて診断',
-      en: 'Inspect a domain and web page in one request',
-    },
-    mode: 'inspect',
-    workspace: 'site-diagnostics',
-  },
-  {
     slug: 'whois',
     emoji: '🗂️',
     pathSlug: 'whois-lookup',
     category: 'network',
     icon: Server,
-    title: { ja: 'WHOIS検索', en: 'WHOIS lookup' },
+    title: { ja: 'RDAP / WHOIS検索', en: 'RDAP / WHOIS lookup' },
     description: {
-      ja: 'ドメインの登録者・期限・ステータスを照会',
-      en: 'Look up a domain registrar, dates and status',
+      ja: '無料の公開RDAPで登録者・期限・ステータスを照会',
+      en: 'Look up registration dates and status through public RDAP',
     },
     mode: 'inspect',
     workspace: 'whois',
@@ -1138,25 +1121,11 @@ export const tools: ToolDefinition[] = [
     icon: Share2,
     title: { ja: 'OGPチェック', en: 'OGP checker' },
     description: {
-      ja: 'OGPとX Cardの設定をプレビューで確認',
-      en: 'Preview Open Graph and X Card tags for a page',
+      ja: 'Microlinkの無料APIでOGPとX Cardを取得',
+      en: 'Fetch Open Graph and X Card tags through Microlink',
     },
     mode: 'inspect',
     workspace: 'ogp-check',
-  },
-  {
-    slug: 'seo-check',
-    emoji: '🔬',
-    pathSlug: 'seo-checker',
-    category: 'network',
-    icon: FileSearch,
-    title: { ja: 'SEOチェック', en: 'SEO checker' },
-    description: {
-      ja: 'タイトルや見出し、canonicalなどを点検',
-      en: 'Audit titles, headings, canonical tags and more',
-    },
-    mode: 'inspect',
-    workspace: 'seo-check',
   },
   {
     slug: 'network-info',
@@ -1317,10 +1286,8 @@ const chineseToolTitles: Record<string, string> = {
   subnet: 'IPv4 子网计算器',
   cidr: 'CIDR 计算器',
   'url-parser': 'URL 解析器',
-  'site-diagnostics': 'DNS、TLS 与 HTTP 诊断',
-  whois: 'WHOIS 查询',
+  whois: 'RDAP / WHOIS 查询',
   'ogp-check': 'OGP 检查器',
-  'seo-check': 'SEO 检查器',
   'network-info': '网络信息',
   'http-status': 'HTTP 状态码列表',
   geolocation: '地理位置',
@@ -1401,10 +1368,8 @@ const chineseToolDescriptions: Record<string, string> = {
   subnet: '计算 IPv4 网络范围',
   cidr: '计算 IPv4/IPv6 CIDR 网络范围、包含关系和子网划分',
   'url-parser': '查看 URL 组成部分和查询参数',
-  'site-diagnostics': '一次请求即可检查域名与网页',
-  whois: '查询域名注册商、日期和状态',
-  'ogp-check': '预览网页的 Open Graph 与 X Card 标签',
-  'seo-check': '检查标题、标题层级、canonical 标签等 SEO 项目',
+  whois: '通过公共 RDAP 查询域名注册信息',
+  'ogp-check': '通过 Microlink 获取 Open Graph 与 X Card 标签',
   'network-info': '查看浏览器可提供的网络连接详情',
   'http-status': '搜索 1xx–5xx 状态码及双语说明和 RFC 参考资料',
   geolocation: '读取设备的纬度、经度和定位精度',

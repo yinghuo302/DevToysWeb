@@ -369,47 +369,28 @@ export const toolGuideChineseCopy: readonly [string, string][] = [
     'Encoded parameters are shown decoded—do not confuse them with the raw value.',
     '编码后的参数会以解码形式显示；请勿将其与原始值混淆。',
   ],
-  ['Enter the domain or URL to diagnose.', '输入要诊断的域名或 URL。'],
-  [
-    'Run it to see DNS, TLS, HTTP and OGP results together.',
-    '运行后即可查看 DNS、TLS、HTTP 和 OGP 的综合结果。',
-  ],
-  ['Drill into the details of each section.', '查看各部分的详细信息。'],
-  [
-    'Diagnostics reach the target site via a server—do not probe third-party sites aggressively without permission.',
-    '诊断会通过服务器访问目标网站；未经许可，请勿频繁探测第三方网站。',
-  ],
-  [
-    'Results may be unavailable if the target is down or blocks access.',
-    '如果目标网站不可用或阻止访问，可能无法获取结果。',
-  ],
   ['Enter the domain name to look up.', '输入要查询的域名。'],
   ['Read the registrar, dates and status.', '查看注册商、日期和状态。'],
   [
-    'The lookup queries external WHOIS servers, sending the domain name.',
-    '查询会访问外部 WHOIS 服务器，并发送域名。',
+    'The lookup queries a free public RDAP service and sends the domain name.',
+    '查询会访问免费的公共 RDAP 服务，并发送域名。',
   ],
   ['Registrant details may be hidden by privacy protection.', '注册人信息可能因隐私保护而被隐藏。'],
   ['Some TLDs expose only limited information.', '某些顶级域名（TLD）仅公开有限信息。'],
   ['Enter the page URL to check.', '输入要检查的页面 URL。'],
-  ['Its Open Graph and X Card tags are loaded.', '页面的 Open Graph 和 X Card 标签会被读取。'],
+  [
+    'The free Microlink API loads its Open Graph and X Card tags.',
+    'Microlink 免费 API 会读取页面的 Open Graph 和 X Card 标签。',
+  ],
   ['Preview how it will look when shared.', '预览分享时的显示效果。'],
-  ['Fetching reaches the target page via a server.', '获取页面内容时会通过服务器访问目标页面。'],
+  [
+    'The entered URL is sent to Microlink; its free plan currently allows 25 requests per day.',
+    '输入的 URL 会发送给 Microlink；其免费计划目前每天最多允许 25 次请求。',
+  ],
   [
     'Actual social previews depend on each platform’s cache and rules and may differ.',
     '实际社交媒体预览取决于各平台的缓存和规则，可能与此处不同。',
   ],
-  ['Enter the page URL to audit.', '输入要审查的页面 URL。'],
-  [
-    'Titles, heading structure, canonical and meta tags are analysed.',
-    '将分析标题、标题层级结构、canonical 和 meta 标签。',
-  ],
-  ['Review the findings to guide improvements.', '查看检查结果以指导改进。'],
-  [
-    'This is a lightweight static check and does not diagnose or guarantee rankings.',
-    '这是轻量级静态检查，不会诊断或保证搜索排名。',
-  ],
-  ['Content rendered by JavaScript may not be analysed.', 'JavaScript 渲染的内容可能不会被分析。'],
   [
     'Open the page to see the connection info the browser exposes.',
     '打开页面即可查看浏览器公开的连接信息。',

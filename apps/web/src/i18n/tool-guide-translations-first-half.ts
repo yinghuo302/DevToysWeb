@@ -247,8 +247,8 @@ export const toolGuideFirstHalfChineseCopy: readonly [string, string][] = [
   ],
   ['Enter the secret or public key to verify the signature.', '输入密钥或公钥以验证签名。'],
   [
-    'Verification runs in the browser; tokens and keys are never sent anywhere.',
-    '验证在浏览器中进行；令牌和密钥不会发送到任何地方。',
+    'Signature checks run in your browser; the JWT and key are not uploaded. JWKS mode fetches the supplied URL directly from your browser.',
+    '签名在浏览器本地验证；JWT 和密钥不会上传。JWKS 模式会由浏览器直接请求你提供的 URL。',
   ],
   ['Do not paste production secrets on a shared machine.', '请勿在公用设备上粘贴生产密钥。'],
   [

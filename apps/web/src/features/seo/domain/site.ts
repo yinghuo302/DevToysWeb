@@ -1,8 +1,9 @@
 import { defaultLocale, locales, type Locale } from '@/i18n/dictionaries'
 
-// Production origin served by CloudFront. Keep in sync with `hostedZoneName`
-// in scripts/infra/bin/infra.ts.
-export const siteUrl = 'https://devtoys.ex-foundry.com'
+// Set this at build time to the origin served by the local Nginx host.
+export const siteUrl = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://devtoys.ex-foundry.com',
+).origin
 export const siteName = 'DevToys'
 
 export const ogLocales: Record<Locale, string> = {
@@ -11,9 +12,7 @@ export const ogLocales: Record<Locale, string> = {
   'zh-CN': 'zh_CN',
 }
 
-// A pre-rendered file rather than a `next/og` route: the static export writes
-// image routes without a file extension, and `aws s3 sync` would then serve
-// them as binary/octet-stream, which social scrapers reject.
+// Keep the social preview image as a regular static asset for local hosts.
 export const ogImage = {
   url: '/og.png',
   width: 1200,

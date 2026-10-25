@@ -45,8 +45,6 @@ import { QrCodeWorkspace } from '@/features/qr-code'
 import { QrScannerWorkspace } from '@/features/qr-scanner'
 import { RegexWorkspace } from '@/features/regex'
 import { SelectorWorkspace } from '@/features/selector'
-import { SeoCheckWorkspace } from '@/features/seo-check'
-import { SiteDiagnosticsWorkspace } from '@/features/site-diagnostics'
 import { StopwatchWorkspace } from '@/features/stopwatch'
 import { StringEscapeWorkspace } from '@/features/string-escape'
 import { SubnetWorkspace } from '@/features/subnet'
@@ -120,8 +118,6 @@ export const workspaces: Record<WorkspaceKey, ComponentType<WorkspaceProps>> = {
   regex: RegexWorkspace,
   'scientific-calculator': ScientificCalculatorWorkspace,
   selector: SelectorWorkspace,
-  'seo-check': SeoCheckWorkspace,
-  'site-diagnostics': SiteDiagnosticsWorkspace,
   stopwatch: StopwatchWorkspace,
   'string-escape': StringEscapeWorkspace,
   subnet: SubnetWorkspace,

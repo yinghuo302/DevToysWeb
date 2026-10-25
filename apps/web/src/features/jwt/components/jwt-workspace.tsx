@@ -95,8 +95,9 @@ export const JwtWorkspace = ({ tool }: WorkspaceProps) => {
           </div>
           <p className="text-xs text-muted-foreground">
             {t(
-              '入力したJWTと鍵は保存されません。機密性の高い秘密鍵は入力しないでください。',
-              'Tokens and keys are not stored. Never enter a private key.',
+              'JWTと鍵はブラウザー内で検証され、送信されません。JWKS URLモードでは、そのURLへブラウザーから直接アクセスします。',
+              'JWTs and keys are verified in your browser and are not uploaded. JWKS mode fetches the supplied URL directly from your browser.',
+              'JWT 和密钥在浏览器本地验证，不会上传。JWKS URL 模式会由浏览器直接请求该地址。',
             )}
           </p>
           <ApiResult value={jwt.output} error={jwt.error} />

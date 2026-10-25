@@ -548,12 +548,12 @@ export const toolGuides: Record<string, ToolGuide> = {
     },
     notes: {
       ja: [
-        '検証はブラウザ内で行われ、トークンや鍵が外部へ送信されることはありません。',
+        '署名検証はブラウザ内で行われ、JWT と鍵は送信されません。JWKS URL モードでは、指定した URL にブラウザから直接アクセスします。',
         '本番の秘密鍵を共有端末で貼り付けないでください。',
         'JWT のペイロードは暗号化されていないため、誰でも内容を読めます。',
       ],
       en: [
-        'Verification runs in the browser; tokens and keys are never sent anywhere.',
+        'Signature checks run in your browser; the JWT and key are not uploaded. JWKS mode fetches the supplied URL directly from your browser.',
         'Do not paste production secrets on a shared machine.',
         'JWT payloads are not encrypted—anyone can read their contents.',
       ],
@@ -1731,30 +1731,6 @@ export const toolGuides: Record<string, ToolGuide> = {
       ],
     },
   },
-  'site-diagnostics': {
-    usage: {
-      ja: [
-        '診断したいドメインまたは URL を入力します。',
-        '実行すると DNS・TLS・HTTP・OGP の結果がまとめて表示されます。',
-        '各項目の詳細を確認します。',
-      ],
-      en: [
-        'Enter the domain or URL to diagnose.',
-        'Run it to see DNS, TLS, HTTP and OGP results together.',
-        'Drill into the details of each section.',
-      ],
-    },
-    notes: {
-      ja: [
-        '診断はサーバー経由で対象サイトへアクセスします。第三者のサイトを無断で高頻度に調べないでください。',
-        '対象サイトの応答状況やアクセス制限により結果が得られないことがあります。',
-      ],
-      en: [
-        'Diagnostics reach the target site via a server—do not probe third-party sites aggressively without permission.',
-        'Results may be unavailable if the target is down or blocks access.',
-      ],
-    },
-  },
   whois: {
     usage: {
       ja: [
@@ -1765,12 +1741,12 @@ export const toolGuides: Record<string, ToolGuide> = {
     },
     notes: {
       ja: [
-        '照会は外部の WHOIS サーバーへ問い合わせます。ドメイン名が送信されます。',
+        '照会は無料の公開 RDAP サービスへ行われ、ドメイン名が送信されます。',
         'プライバシー保護により登録者情報が伏せられていることがあります。',
         'TLD によっては提供される情報が限られます。',
       ],
       en: [
-        'The lookup queries external WHOIS servers, sending the domain name.',
+        'The lookup queries a free public RDAP service and sends the domain name.',
         'Registrant details may be hidden by privacy protection.',
         'Some TLDs expose only limited information.',
       ],
@@ -1780,49 +1756,23 @@ export const toolGuides: Record<string, ToolGuide> = {
     usage: {
       ja: [
         '確認したいページの URL を入力します。',
-        'OGP と X Card のタグが読み込まれます。',
+        '無料の Microlink API が OGP と X Card のタグを読み込みます。',
         'SNS 共有時のプレビュー表示を確認します。',
       ],
       en: [
         'Enter the page URL to check.',
-        'Its Open Graph and X Card tags are loaded.',
+        'The free Microlink API loads its Open Graph and X Card tags.',
         'Preview how it will look when shared.',
       ],
     },
     notes: {
       ja: [
-        '取得はサーバー経由で対象ページへアクセスします。',
+        '入力した URL は Microlink に送信されます。無料プランは現在 1 日 25 回までです。',
         '実際の SNS 表示は各サービスのキャッシュや仕様に依存し、プレビューと異なることがあります。',
       ],
       en: [
-        'Fetching reaches the target page via a server.',
+        'The entered URL is sent to Microlink; its free plan currently allows 25 requests per day.',
         'Actual social previews depend on each platform’s cache and rules and may differ.',
-      ],
-    },
-  },
-  'seo-check': {
-    usage: {
-      ja: [
-        '点検したいページの URL を入力します。',
-        'タイトル・見出し構造・canonical・meta などが解析されます。',
-        '指摘項目を確認して改善に役立てます。',
-      ],
-      en: [
-        'Enter the page URL to audit.',
-        'Titles, heading structure, canonical and meta tags are analysed.',
-        'Review the findings to guide improvements.',
-      ],
-    },
-    notes: {
-      ja: [
-        '取得はサーバー経由で対象ページへアクセスします。',
-        '簡易的な静的チェックであり、検索順位を保証・診断するものではありません。',
-        'JavaScript で描画される内容は解析対象外の場合があります。',
-      ],
-      en: [
-        'Fetching reaches the target page via a server.',
-        'This is a lightweight static check and does not diagnose or guarantee rankings.',
-        'Content rendered by JavaScript may not be analysed.',
       ],
     },
   },

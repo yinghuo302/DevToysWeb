@@ -135,15 +135,6 @@ export const workspaceChineseCopy: readonly [string, string][] = [
     'This browser does not support the BarcodeDetector API.',
     '此浏览器不支持 BarcodeDetector API。',
   ],
-  [
-    'Checks the on-page SEO signals available from a single request.',
-    '通过一次请求检查页面上可获取的 SEO 信号。',
-  ],
-  [
-    'Inspect DNS, HTTP, TLS, security headers and page metadata.',
-    '检查 DNS、HTTP、TLS、安全标头和页面元数据。',
-  ],
-  ['No TLS — the target is not served over HTTPS', '无 TLS — 目标站点未通过 HTTPS 提供服务'],
   ['Subnet mask', '子网掩码'],
   [
     'Announces the time every 10 seconds, with pips starting 3 seconds before.',

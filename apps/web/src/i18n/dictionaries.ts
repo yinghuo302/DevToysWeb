@@ -142,7 +142,7 @@ const dictionaries = {
             heading: 'データの扱い',
             paragraphs: [
               'ブラウザ内で完結するツールの入力データは、基本的に端末内で処理されます。ブラウザを閉じたりページを移動したりすると入力内容は保持されません。',
-              'サイト診断などネットワークアクセスが必要なツールでは、入力したURLがサーバーAPIに送信されます。ツールごとの注意事項とプライバシーポリシーも確認してください。',
+              'OGP確認とRDAP検索では、入力したURLまたはドメインが外部サービスへ送信されます。JWT検証はブラウザー内で行われますが、JWKS URLモードでは指定先へ直接アクセスします。',
             ],
           },
         ],
@@ -172,8 +172,8 @@ const dictionaries = {
           {
             heading: 'ネットワークを使うツール',
             paragraphs: [
-              'URLの診断、OGP確認、WHOIS検索などは、対象にアクセスして結果を取得する必要があります。入力するURLやドメインに機密情報を含めないでください。',
-              '社内サイトやアクセス制限されたサイトの診断結果は、実行環境やネットワークの設定によって変わることがあります。結果は最終判断ではなく、確認のきっかけとして利用してください。',
+              'OGP確認ではURLがMicrolinkへ、ドメイン登録情報の確認ではドメイン名が公開RDAPサービスへ送信されます。機密情報を含むURLやドメインを入力しないでください。',
+              'JWKS URLを指定したJWT検証では、そのURLへブラウザーから直接リクエストします。',
             ],
           },
           {
@@ -228,10 +228,10 @@ const dictionaries = {
             ],
           },
           {
-            heading: 'サーバーに送信される情報',
+            heading: '外部サービスへ送信される情報',
             paragraphs: [
-              'サイト診断、OGP確認、WHOIS検索などネットワークアクセスが必要なツールでは、処理に必要なURLやドメインがDevToysのAPIに送信されます。機密情報やアクセス用の認証情報を入力しないでください。',
-              'APIへのリクエストは、サービスの提供・不正利用の防止・障害調査に必要な範囲で処理されます。',
+              'OGP確認では入力したURLがMicrolinkへ、ドメイン登録情報の確認ではドメイン名が公開RDAPサービスへ送信されます。JWT検証はブラウザー内で行われますが、JWKS URLモードでは指定先へブラウザーから直接リクエストします。機密情報や認証情報を含むURL・ドメインを入力しないでください。',
+              '外部サービスの利用には各サービスのプライバシーポリシーと利用制限が適用されます。',
             ],
           },
           {
@@ -457,7 +457,7 @@ const dictionaries = {
             heading: 'How data is handled',
             paragraphs: [
               'Inputs for browser-only tools are generally processed on your device. Input is not retained when you close the browser or leave the page.',
-              'Tools that need network access, such as site diagnostics, send the URL you enter to the server API. Review the tool notes and privacy policy before using them.',
+              'OGP checks send the entered URL to Microlink, and domain-registration lookups send the domain to public RDAP servers. JWT checks run locally; JWKS mode fetches its supplied URL directly from your browser.',
             ],
           },
         ],
@@ -487,8 +487,8 @@ const dictionaries = {
           {
             heading: 'Tools that use the network',
             paragraphs: [
-              'URL diagnostics, OGP checks, and WHOIS lookups need to access a target and retrieve a result. Do not include secrets or access credentials in the URL or domain you submit.',
-              'Results for internal or access-controlled sites can vary with the execution environment and network configuration. Treat them as a starting point for investigation, not as a final decision.',
+              'OGP checks send the page URL to Microlink, while domain-registration lookups send the domain to public RDAP services. Do not submit URLs or domains containing secrets or access credentials.',
+              'JWT verification stays in the browser unless JWKS mode is selected; that mode requests the specified JWKS URL directly.',
             ],
           },
           {
@@ -543,10 +543,10 @@ const dictionaries = {
             ],
           },
           {
-            heading: 'Information sent to the server',
+            heading: 'Information sent to external services',
             paragraphs: [
-              'Tools that need network access, such as site diagnostics, OGP checks, and WHOIS lookups, send the URL or domain needed for processing to the DevToys API. Do not submit secrets or authentication information.',
-              'API requests are processed only as needed to provide the service, prevent misuse, and investigate failures.',
+              'OGP checks send the entered URL to Microlink, and domain-registration lookups send the domain to public RDAP services. JWT verification runs in your browser, except that JWKS mode directly fetches the supplied URL. Do not submit URLs or domains containing secrets or authentication information.',
+              'Third-party service use is subject to each provider’s privacy policy and usage limits.',
             ],
           },
           {

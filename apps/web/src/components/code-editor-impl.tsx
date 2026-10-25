@@ -8,8 +8,7 @@ import { cn } from '@/libs/utils'
 import type { CodeEditorProps } from './code-editor-types'
 
 /*
- * Self-hosted Monaco. `output: 'export'` ships to CloudFront under a strict CSP,
- * so nothing may come from a CDN. We bundle the full `monaco-editor` package and
+ * Self-hosted Monaco for the static export. We bundle the full `monaco-editor` package and
  * hand its language workers to the bundler via `new Worker(new URL(...))`, a
  * pattern both webpack and Turbopack turn into local static chunks. This module
  * is only ever loaded in the browser (via a `ssr: false` dynamic import), so the

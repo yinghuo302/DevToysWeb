@@ -3,10 +3,9 @@
 import { useState } from 'react'
 
 /**
- * Runs a one-shot API call and exposes the JSON result, failure text, and
- * in-flight flag that the server-backed workspaces all render the same way.
+ * Runs a one-shot asynchronous operation and exposes its JSON result, error, and loading state.
  */
-export const useApiRequest = <Request>(
+export const useAsyncRequest = <Request>(
   send: (request: Request) => Promise<unknown>,
   fallbackMessage: string,
 ) => {

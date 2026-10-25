@@ -6,10 +6,8 @@ This file is the operating guide for coding agents working in this repository.
 
 DevToysWeb is a pnpm/Turborepo monorepo for a localized developer-tool website supporting Japanese, English, and Simplified Chinese.
 
-- `apps/web`: Next.js App Router frontend, statically exported for S3/CloudFront
-- `apps/api`: Hono handlers deployed as an AWS Lambda
-- `scripts/infra`: AWS CDK application for S3, CloudFront, and Lambda
-- `.github/workflows`: production and content-only deployment workflows
+- `apps/web`: Next.js App Router frontend, statically exported for local Nginx hosting
+- `.github/workflows`: CI validation only; deployment is performed by copying static output to a local Nginx root
 
 Use pnpm from the repository root. The expected runtime is Node.js 26 and the package
 manager version is pinned in the root `package.json`.
@@ -23,8 +21,8 @@ when renaming a package.
 1. Read the nearest source files and their callers before editing.
 2. Check `git status --short`; preserve unrelated and user-authored changes.
 3. Prefer existing feature boundaries and UI primitives over introducing new patterns.
-4. Do not edit generated directories: `.next`, `out`, `.turbo`, `cdk.out`,
-   `node_modules`, or `*.tsbuildinfo`.
+4. Do not edit generated directories: `.next`, `out`, `.turbo`, `node_modules`,
+   or `*.tsbuildinfo`.
 
 ## Where changes belong
 
@@ -43,8 +41,8 @@ when renaming a package.
 - UI shared by several workspaces (shell, panes, copy button, search fields):
   `apps/web/src/features/tools/components/`
 - Hooks shared by several workspaces: `apps/web/src/features/tools/hooks/`
-- Browser-side clients for `apps/api`: `apps/web/src/features/tools/api/`
-- MSW handlers and fixtures for those clients: `apps/web/src/mocks/`
+- Browser clients for public third-party services: `apps/web/src/libs/api/public-services.ts`
+- Local JWT verification: `apps/web/src/features/jwt/functions/verify-jwt.ts`
 - Shared UI primitives: `apps/web/src/components/ui/`
 - Cross-cutting components and hooks used by more than one feature
   (locale/theme providers, `useTranslate`): `apps/web/src/components/` and
@@ -53,11 +51,8 @@ when renaming a package.
 - Canonical URLs, `hreflang`, Open Graph, and JSON-LD:
   `apps/web/src/features/seo/`; the sitemap and robots routes live in
   `apps/web/src/app/sitemap.ts` and `apps/web/src/app/robots.ts`
-- Server endpoints: `apps/api/src/`; keep the `/api` prefix because CloudFront routes it
-- AWS resources and routing: `scripts/infra/lib/devtoys-stack.ts`
-- GitHub Actions OIDC and deployment roles are managed centrally in
-  `s-yoshiki/aws-terraform`; this repository only consumes their ARNs through
-  GitHub Environment Variables.
+- Static sub-site import guide: `docs/static-site-integration.md`
+- Local Nginx configuration example: `docs/nginx-static-site.conf`
 
 When adding a tool, update the catalog and all supported locales together. Reuse an existing
 workspace when possible; otherwise extend the `workspace` union, add a flat
@@ -65,8 +60,7 @@ workspace when possible; otherwise extend the `workspace` union, add a flat
 and register the component in `workspaces/registry.ts`. Keep state and derivation in the
 workspace's hook so its component stays declarative, and push framework-free logic down
 into `domain/`.
-Keep browser-only transformations in the web app. Put operations requiring network access,
-secret material, or server-side trust boundaries in the API.
+Keep transformations in the browser. The project has no backend API: network-dependent tools may call a documented free public service directly from the browser; if no suitable free replacement exists, remove the tool. Make each third-party data transfer and quota visible to users.
 
 ## Project constraints
 
@@ -78,8 +72,8 @@ secret material, or server-side trust boundaries in the API.
 - Use the existing shadcn/Base UI components and Tailwind tokens before adding dependencies
   or custom primitives.
 - User-facing shared text must be supplied in every supported locale (Japanese, English, and Simplified Chinese).
-- Network diagnostics must retain SSRF protections in `apps/api/src/network.ts`.
-- Never deploy, bootstrap CDK, change cloud resources, or add secrets unless explicitly asked.
+- Do not add a backend API, AWS/CDK deployment path, or production Node server.
+- Third-party browser requests must use a documented free provider and disclose sent data and quotas; otherwise remove the tool.
 
 ## Validation
 
@@ -99,43 +93,31 @@ Package-scoped equivalents are faster for focused work:
 
 ```sh
 pnpm --filter @repo/web typecheck
+pnpm --filter @repo/web test
 pnpm --filter @repo/web build
-pnpm --filter @repo/api test
-pnpm --filter @repo/infra typecheck
-pnpm --filter @repo/infra synth:dev
 ```
 
 For UI changes, inspect both `/ja/` and `/en/`, plus a representative tool route at mobile
 and desktop widths. A successful typecheck alone does not validate the static export.
 
-## Mocking the API
+## External services
 
-The server-backed tools (site diagnostics, WHOIS, OGP, SEO, JWT) call `apps/api`. MSW
-answers those calls from fixtures so they can be exercised without a Lambda:
+The static site has no self-hosted API. Browser-side network tools use public services:
 
-```sh
-pnpm --filter @repo/web dev:mock   # next dev with the service worker enabled
-```
+- OGP extraction calls Microlink directly. Its current free plan allows 25 requests per day;
+  the submitted page URL is sent to Microlink.
+- Domain-registration lookup uses public RDAP. The queried domain is sent to the RDAP service.
+- JWT verification runs locally with Web Crypto. JWKS mode makes a direct browser request to
+  the supplied URL; the JWT and key are not uploaded.
+- Tests inject mocked `fetch` implementations. Do not call live third-party services from tests.
 
-- `src/mocks/handlers.ts` mirrors the routes in `apps/api/src/index.ts`, and
-  `src/mocks/fixtures.ts` replays the same validation errors — including the SSRF
-  guards — so error states are reachable offline.
-- Scenario hostnames drive the interesting branches: `sloppy.example.com` (failing SEO
-  and OGP checks), `unreachable.example.com` (error banner),
-  `redirected.example.com` (redirect chain and 404). Anything else returns a healthy
-  page report.
-- Node tests call `installMockApi()` from `src/mocks/node.ts`; unhandled requests fail
-  the test instead of reaching the network.
-- Mocks only load when `NEXT_PUBLIC_API_MOCKS=enabled` **and** `NODE_ENV` is
-  `development`, so a production export contains no MSW code. The worker script is
-  generated into `apps/web/public/` by `dev:mock` and is git-ignored; do not deploy it.
-- When an `apps/api` route or payload changes, update the matching handler and fixture
-  in the same change.
+If a future network tool has no suitable free public service, remove it rather than adding a
+self-hosted API or cloud dependency.
 
 ## Tests and change hygiene
 
-- Add or update focused tests for pure logic and API security boundaries.
-- Place API tests beside the source as `*.test.ts`; the package's `tsx` runner executes them.
+- Add focused tests for pure logic, browser-side public-service clients, and local cryptography.
+- Place tests beside the source as `*.test.ts`; the package's `tsx` runner executes them.
 - Avoid broad formatting churn. Run `pnpm exec biome check --write <changed-files>` for
   targeted fixes when useful.
 - Do not commit generated build output or local environment files.

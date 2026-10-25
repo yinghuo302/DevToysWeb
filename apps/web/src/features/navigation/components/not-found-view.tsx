@@ -12,7 +12,7 @@ import { getToolPath } from '@/libs/domain/tool-path'
 const suggestions = ['json-format', 'base64', 'unit-convert', 'timer', 'qr-code', 'text-diff']
 
 /**
- * Rendered by the static `404.html`, which CloudFront serves for any unmatched
+ * Rendered by the static `404.html`, which Nginx serves for unmatched
  * path — so the locale cannot come from a route param and is read from the URL
  * after mount instead. Simplified Chinese is the default, matching `/`.
  */

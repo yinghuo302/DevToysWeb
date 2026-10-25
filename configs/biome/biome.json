@@ -13,9 +13,7 @@
       "!!**/.turbo",
       "!!**/node_modules",
       "!!**/next-env.d.ts",
-      "!!**/out",
-      "!!**/cdk.out",
-      "!!**/public/mockServiceWorker.js"
+      "!!**/out"
     ]
   },
   "formatter": {

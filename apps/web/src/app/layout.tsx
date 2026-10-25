@@ -3,7 +3,6 @@ import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ogImage, siteName, siteUrl } from '@/features/seo/domain/site'
-import { ApiMockProvider } from '@/mocks/api-mock-provider'
 
 export const metadata: Metadata = {
   // Lets every page declare canonical and Open Graph URLs as relative paths.
@@ -24,8 +23,7 @@ export const metadata: Metadata = {
     ],
     apple: { url: '/apple-touch-icon.png', sizes: '180x180' },
   },
-  // `.json` rather than `.webmanifest`: `aws s3 sync` only guesses a usable
-  // content type for extensions it knows, and browsers accept application/json.
+  // JSON is a widely supported manifest MIME type for static hosts such as Nginx.
   manifest: '/manifest.json',
   openGraph: { type: 'website', siteName, images: [ogImage] },
   twitter: { card: 'summary_large_image', images: [ogImage] },
@@ -49,9 +47,7 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
             gtag('config', 'G-YCXXYP9PZH');
           `}
         </Script>
-        <ThemeProvider>
-          <ApiMockProvider>{children}</ApiMockProvider>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )

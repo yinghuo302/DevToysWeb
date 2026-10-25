@@ -1,24 +1,27 @@
 'use client'
 
 import { useState } from 'react'
-import { diagnoseSite } from '@/libs/api/diagnostics-client'
-import type { FullSiteReport } from '../types'
+import { fetchOgpMetadata, type PageMetadataReport } from '@/libs/api/public-services'
 
-export const useSiteDiagnostics = () => {
+export const useOgpCheck = () => {
   const [url, setUrl] = useState('https://example.com')
-  const [report, setReport] = useState<FullSiteReport | null>(null)
+  const [report, setReport] = useState<PageMetadataReport | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const run = async () => {
-    if (!url.trim()) return
+    const value = url.trim()
+    if (!value) {
+      return
+    }
     setLoading(true)
     setError('')
     try {
-      setReport((await diagnoseSite(url)) as FullSiteReport)
+      setReport(await fetchOgpMetadata(value))
     } catch (reason) {
       setReport(null)
-      setError(reason instanceof Error ? reason.message : 'Diagnostics failed')
+      if (reason instanceof Error) setError(reason.message)
+      else setError('OGP check failed')
     } finally {
       setLoading(false)
     }

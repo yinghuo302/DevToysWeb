@@ -7,9 +7,7 @@ pnpm install
 pnpm dev
 ```
 
-The main packages are the static Next.js frontend in `apps/web`, the Hono Lambda API in
-`apps/api`, and the AWS CDK application in `scripts/infra`. See `AGENTS.md` for the detailed
-repository map, project constraints, and guidance for adding tools.
+The repository contains a statically exported Next.js frontend in `apps/web`; production files are served by local Nginx. See `AGENTS.md` and `docs/static-site-integration.md` for the repository map, static hosting constraints, and sub-site workflow.
 
 Before opening a pull request, run:
 
@@ -21,6 +19,4 @@ pnpm format:check
 pnpm build
 ```
 
-Keep pull requests focused, include tests for logic changes, and provide Japanese and English
-copy for user-facing features. Do not commit generated output such as `.next`, `out`,
-`.turbo`, `cdk.out`, or `*.tsbuildinfo`.
+Keep pull requests focused, include tests for logic changes, and provide Japanese, English, and Simplified Chinese copy for user-facing features. Do not commit generated output such as `.next`, `out`, `.turbo`, or `*.tsbuildinfo`.

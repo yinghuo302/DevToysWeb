@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ErrorBanner } from '@/components/workspace-panes'
 import { WorkspaceShell } from '@/components/workspace-shell'
-import { usePageReport } from '@/hooks/use-page-report'
+import { useOgpCheck } from '../hooks/use-ogp-check'
 import { useTranslate } from '@/hooks/use-translate'
 import { cn } from '@/libs/utils'
 import type { WorkspaceProps } from '@/workspaces/types'
@@ -60,11 +60,11 @@ const FieldTable = ({ title, fields }: { title: string; fields: OgpField[] }) =>
 export const OgpCheckWorkspace = ({ tool }: WorkspaceProps) => {
   const fieldId = useId()
   const t = useTranslate()
-  const page = usePageReport('OGP check failed')
+  const page = useOgpCheck()
 
   const metadata = page.report?.page ?? {}
   const preview = sharePreview(metadata)
-  const base = page.report?.http.finalUrl ?? page.report?.target ?? ''
+  const base = page.report?.finalUrl ?? page.report?.target ?? ''
   const imageUrl = resolveAgainst(preview.image, base)
   const missing = openGraphFields(metadata).filter((field) => field.status === 'missing')
   const hostname = URL.canParse(base) ? new URL(base).hostname : base
@@ -96,8 +96,9 @@ export const OgpCheckWorkspace = ({ tool }: WorkspaceProps) => {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                'OGPとX Cardのタグを取得し、SNSでの見え方を再現します。',
-                'Fetches the Open Graph and X Card tags and reproduces how the page will look when shared.',
+                '無料のMicrolink APIでOGPとX Cardを取得します。入力したURLは外部サービスに送信され、無料プランには1日25回の上限があります。',
+                'Fetches Open Graph and X Card tags using Microlink. The URL is sent to this free third-party service, which currently limits free usage to 25 requests per day.',
+                '通过 Microlink 免费 API 获取 OGP 与 X Card 标签。输入的 URL 会发送给第三方服务，免费额度目前为每天 25 次。',
               )}
             </p>
           </CardContent>

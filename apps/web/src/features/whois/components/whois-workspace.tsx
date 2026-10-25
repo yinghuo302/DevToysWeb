@@ -59,8 +59,9 @@ export const WhoisWorkspace = ({ tool }: WorkspaceProps) => {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                'IANAから各レジストリ・レジストラへ順に照会します。TLDによっては取得できる項目が異なります。',
-                'The lookup follows referrals from IANA to the registry and registrar. Available fields vary by TLD.',
+                '無料の公開RDAPサービスで登録情報を照会します。取得できる項目はTLDやレジストリによって異なります。',
+                'Queries public RDAP registration data. Available fields vary by TLD and registry.',
+                '通过免费的公共 RDAP 服务查询注册信息；不同顶级域名和注册局返回的字段可能不同。',
               )}
             </p>
           </CardContent>

@@ -58,7 +58,7 @@ export const chineseContentPages: Record<ContentPageSlug, ContentPageCopy> = {
         heading: '数据如何处理',
         paragraphs: [
           '仅在浏览器中运行的工具通常会在你的设备上处理输入。关闭浏览器或离开页面后，输入内容不会保留。',
-          '网站诊断等需要网络访问的工具会将你输入的 URL 发送到服务器 API。使用前请查看相应工具的说明和隐私政策。',
+          'OGP 检查会将输入的 URL 发送给 Microlink，域名注册查询会将域名发送给公共 RDAP 服务。JWT 在浏览器中本地验证；JWKS 模式会由浏览器直接请求指定 URL。使用前请查看工具说明和第三方服务的隐私政策。',
         ],
       },
     ],
@@ -87,8 +87,8 @@ export const chineseContentPages: Record<ContentPageSlug, ContentPageCopy> = {
       {
         heading: '需要使用网络的工具',
         paragraphs: [
-          'URL 诊断、OGP 检查和 WHOIS 查询需要访问目标并获取结果。请勿在提交的 URL 或域名中包含秘密信息或访问凭据。',
-          '对内部站点或受访问控制站点的检查结果，可能因执行环境和网络配置而异。请将结果作为调查起点，而非最终结论。',
+          'OGP 检查会将页面 URL 发送给 Microlink，域名注册查询会将域名发送给公共 RDAP 服务。请勿提交包含秘密信息或访问凭据的 URL 和域名。',
+          'JWT 在浏览器中本地验证；选择 JWKS 模式时，浏览器会直接请求指定的 JWKS URL。',
         ],
       },
       {
@@ -137,10 +137,10 @@ export const chineseContentPages: Record<ContentPageSlug, ContentPageCopy> = {
         ],
       },
       {
-        heading: '发送到服务器的信息',
+        heading: '发送到外部服务的信息',
         paragraphs: [
-          '网站诊断、OGP 检查和 WHOIS 查询等需要网络访问的工具，会将处理所需的 URL 或域名发送到 DevToys API。请勿提交秘密信息或身份验证信息。',
-          'API 请求仅在提供服务、防止滥用和调查故障所需的范围内处理。',
+          'OGP 检查会将输入的 URL 发送给 Microlink，域名注册查询会将域名发送给公共 RDAP 服务。JWT 在浏览器中本地验证；JWKS 模式会由浏览器直接请求指定 URL。请勿提交包含秘密或身份验证信息的 URL、域名。',
+          '使用第三方服务时，适用相应服务商的隐私政策和使用限制。',
         ],
       },
       {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { lookupWhois, type WhoisReport } from '@/libs/api/diagnostics-client'
+import { lookupWhois, type WhoisReport } from '@/libs/api/public-services'
 
 export const useWhois = () => {
   const [domain, setDomain] = useState('example.com')
@@ -11,14 +11,17 @@ export const useWhois = () => {
 
   const run = async () => {
     const value = domain.trim()
-    if (!value) return
+    if (!value) {
+      return
+    }
     setLoading(true)
     setError('')
     try {
       setReport(await lookupWhois(value))
     } catch (reason) {
       setReport(null)
-      setError(reason instanceof Error ? reason.message : 'WHOIS lookup failed')
+      if (reason instanceof Error) setError(reason.message)
+      else setError('RDAP lookup failed')
     } finally {
       setLoading(false)
     }
@@ -30,5 +33,5 @@ export const useWhois = () => {
     setError('')
   }
 
-  return { domain, setDomain, report, error, loading, run: () => void run(), clear }
+  return { domain, setDomain, report, error, loading, run, clear }
 }
