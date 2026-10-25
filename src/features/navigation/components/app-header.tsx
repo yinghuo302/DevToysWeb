@@ -92,20 +92,13 @@ const MobileNav = ({ onNavigate }: { onNavigate: () => void }) => {
 export const AppHeader = () => {
   const { locale, dictionary } = useLocale()
   const pathname = usePathname()
-  const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`
   const router = useRouter()
   const palette = useCommandPalette()
   const shortcutHint = useShortcutHint()
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header
-      data-home-page={isHomePage ? 'true' : undefined}
-      className={cn(
-        'z-50 border-b border-border bg-background/85 backdrop-blur-md',
-        isHomePage ? 'fixed inset-x-0 top-0' : 'sticky top-0',
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
       {/*
        * First tabbable element on the page: lets keyboard users jump past the
        * sidebar's ~60 tool links straight to the tool they opened.

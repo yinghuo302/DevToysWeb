@@ -55,7 +55,7 @@
   --warning: #ad3e0b;
 
   --radius: 10px;
-  /* Shared by the sticky app header, fixed-homepage spacer, and sidebar offset. */
+  /* Shared by the fixed app header, flow spacer, and sidebar offset. */
   --header-height: 3.5rem;
 }
 
@@ -86,8 +86,8 @@
   --warning: #ffa94d;
 }
 
-/* A fixed homepage header leaves normal flow, so reserve its height in the wrapper. */
-[data-app-chrome="header"]:has([data-home-page="true"]) {
+/* The fixed app header leaves normal flow, so reserve its height in the wrapper. */
+[data-app-chrome="header"] {
   height: var(--header-height);
 }
 
