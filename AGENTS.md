@@ -44,6 +44,7 @@ Keep transformations in the browser. The project has no backend API: network-dep
 ## Project constraints
 
 - The application uses Next.js `output: 'export'`; `pnpm build` runs the Next.js build/typecheck and writes the deployable static site directly to root `dist/`. Use the pnpm scripts rather than invoking package-scoped commands.
+- Keep the homepage free of a popular-tools list/section unless specifically requested; use categories and recent tools for discovery.
 - Do not add Next.js features that require a runtime server, such as server actions, middleware, or dynamic server rendering.
 - Routes must remain compatible with static output and `trailingSlash: true`.
 - Imports from `src/` may use the `@/` alias.

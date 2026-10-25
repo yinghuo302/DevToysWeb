@@ -29,7 +29,6 @@ const dictionaries = {
     heroDescription:
       'ブラウザだけで完結する小さな道具を、ひとつの静かで高速なワークスペースにまとめました。',
     allTools: 'すべてのツール',
-    popularTools: 'よく使うツール',
     browseByCategory: 'カテゴリから探す',
     toolCount: '個のWebツールがすぐに使えます',
     noToolsFound: '該当するツールが見つかりませんでした',
@@ -343,7 +342,6 @@ const dictionaries = {
     heroDescription:
       'A collection of focused, browser-only utilities gathered in one calm and fast workspace.',
     allTools: 'All tools',
-    popularTools: 'Popular tools',
     browseByCategory: 'Browse by category',
     toolCount: 'web tools ready to use',
     noToolsFound: 'No matching tools found',
@@ -669,7 +667,6 @@ const chineseDictionaryOverrides: Partial<Dictionary> = {
   tagline: '开发日常，轻松一点。',
   heroDescription: '把常用的小工具汇集到一个安静、快速的浏览器工作空间。',
   allTools: '全部工具',
-  popularTools: '热门工具',
   browseByCategory: '按类别浏览',
   toolCount: '个开发工具，即开即用',
   noToolsFound: '没有找到符合条件的工具',

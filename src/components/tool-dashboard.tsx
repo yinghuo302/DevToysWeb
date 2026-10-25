@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, History, LayoutGrid, Search, TrendingUp, X } from 'lucide-react'
+import { ArrowRight, History, LayoutGrid, Search, X } from 'lucide-react'
 import { useId, useMemo, useState } from 'react'
 import { useLocale } from '@/components/locale-provider'
 import { Button } from '@/components/ui/button'
@@ -15,8 +15,6 @@ import {
 } from '@/libs/domain/catalog'
 import { cn } from '@/libs/utils'
 import { ToolCard } from './tool-card'
-
-const popularSlugs = ['json-format', 'base64', 'jwt', 'regex', 'text-diff', 'qr-code']
 
 const SectionHeading = ({
   icon: Icon,
@@ -54,10 +52,6 @@ export const ToolDashboard = () => {
       ),
     [activeCategory, locale, query],
   )
-  const popular = popularSlugs
-    .map((slug) => tools.find((tool) => tool.slug === slug))
-    .filter((tool): tool is (typeof tools)[number] => Boolean(tool))
-
   const isFiltered = Boolean(query) || activeCategory !== 'all'
   const resetFilters = () => {
     setQuery('')
@@ -116,17 +110,6 @@ export const ToolDashboard = () => {
           <SectionHeading icon={History}>{dictionary.recentTools}</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {recent.slice(0, 3).map((tool) => (
-              <ToolCard key={tool.slug} tool={tool} locale={locale} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {!isFiltered && (
-        <section className="mt-10">
-          <SectionHeading icon={TrendingUp}>{dictionary.popularTools}</SectionHeading>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {popular.map((tool) => (
               <ToolCard key={tool.slug} tool={tool} locale={locale} />
             ))}
           </div>
