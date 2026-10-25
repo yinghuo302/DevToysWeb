@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/next.json",
+  "extends": "./configs/tsconfig/next.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]

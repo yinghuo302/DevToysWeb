@@ -14,5 +14,6 @@
 | [0002](0002-retain-replaced-acm-certificates.md) | Replaced ACM certificates are retained | Accepted |
 | [0003](0003-node-24-compatibility-and-chinese-localization.md) | Node 24 compatibility and Chinese localization | Accepted |
 | [0004](0004-host-standalone-static-sites.md) | Static export and local Nginx hosting | Accepted |
+| [0005](0005-single-package-root-src-dist.md) | Single pnpm project with root src and dist | Accepted |
 
 テンプレート: [template.md](template.md)

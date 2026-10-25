@@ -46,12 +46,12 @@ pnpm test
 生产部署只生成静态文件，由本地 Nginx 直接托管；仓库不包含后端 API、Node.js 生产服务器或云部署流程。
 
 ```sh
-# 构建静态站点，输出到 apps/web/out/
+# 构建静态站点，输出到根目录 dist/
 NEXT_PUBLIC_SITE_URL=http://localhost pnpm build
 
 # 将产物复制到 Nginx root（根据服务器配置调整路径）
 sudo mkdir -p /var/www/devtoys/current
-sudo cp -a apps/web/out/. /var/www/devtoys/current/
+sudo cp -a dist/. /var/www/devtoys/current/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
@@ -62,7 +62,7 @@ $env:NEXT_PUBLIC_SITE_URL = 'http://localhost'
 pnpm build
 ```
 
-Nginx 配置示例见 [`docs/nginx-static-site.conf`](./docs/nginx-static-site.conf)。`apps/web/out/` 包含各语言路由和 `public/` 静态资源；Nginx 使用 `index index.html` 与 `try_files $uri $uri/ =404` 服务目录下的页面。相机、定位和 Web Crypto 需要安全上下文：`localhost` 可使用 HTTP，局域网域名或 IP 应配置 HTTPS。
+Nginx 配置示例见 [`docs/nginx-static-site.conf`](./docs/nginx-static-site.conf)。`dist/` 包含各语言路由和 `public/` 静态资源；Nginx 使用 `index index.html` 与 `try_files $uri $uri/ =404` 服务目录下的页面。相机、定位和 Web Crypto 需要安全上下文：`localhost` 可使用 HTTP，局域网域名或 IP 应配置 HTTPS。
 
 ## 网络工具与第三方服务
 

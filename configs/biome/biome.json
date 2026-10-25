@@ -13,7 +13,8 @@
       "!!**/.turbo",
       "!!**/node_modules",
       "!!**/next-env.d.ts",
-      "!!**/out"
+      "!!**/out",
+      "!!**/dist"
     ]
   },
   "formatter": {
@@ -39,7 +40,6 @@
       "vue": "none",
       "project": "none",
       "tailwind": "all",
-      "turborepo": "all",
       "playwright": "none",
       "types": "none"
     }
@@ -57,7 +57,7 @@
   },
   "overrides": [
     {
-      "includes": ["apps/web/src/components/ui/**"],
+      "includes": ["src/components/ui/**"],
       "linter": {
         "rules": {
           "a11y": {

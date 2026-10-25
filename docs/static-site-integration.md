@@ -5,18 +5,18 @@ DevToysWeb 只构建静态文件，并由本地 Nginx 托管。独立网站保�
 ## 添加一个已构建的静态网站
 
 1. 确认网站可由静态服务器运行，入口为根目录 `index.html`，并检查许可证、第三方脚本和 service worker。
-2. 选一个唯一的 URL 前缀，例如 `reports-site`，把整个目录复制到 `apps/web/public/reports-site/`：
+2. 选一个唯一的 URL 前缀，例如 `reports-site`，把整个目录复制到 `public/reports-site/`：
 
    ```bash
-   mkdir -p apps/web/public/reports-site
-   cp -a /path/to/reports-site/. apps/web/public/reports-site/
+   mkdir -p public/reports-site
+   cp -a /path/to/reports-site/. public/reports-site/
    ```
 
    PowerShell 示例：
 
    ```powershell
-   New-Item -ItemType Directory -Force apps/web/public/reports-site | Out-Null
-   Copy-Item -Path 'C:\path\to\reports-site\*' -Destination 'apps\web\public\reports-site\' -Recurse -Force
+   New-Item -ItemType Directory -Force public/reports-site | Out-Null
+   Copy-Item -Path 'C:\path\to\reports-site\*' -Destination 'public\reports-site\' -Recurse -Force
    ```
 
    需要时单独复制隐藏文件。不要覆盖 `public/` 根目录，也不要与应用的 `/_next/`、favicon 或其他子站撞路径。
@@ -24,7 +24,7 @@ DevToysWeb 只构建静态文件，并由本地 Nginx 托管。独立网站保�
 4. 若要从 DevToysWeb 的首页或导航打开子站，添加普通 `<a href="/reports-site/">` 链接，并为日语、英语、简体中文补齐标题与说明。原始 `public/` HTML 不是 App Router 页面，不要用 Next 客户端路由代替完整页面导航。
 5. 若需要搜索引擎收录，将该子站的绝对 URL 单独加入 sitemap；没有实际本地化版本时，不要伪造 locale/hreflang 路由。
 
-Next.js 静态导出会把 `apps/web/public/reports-site/` 原样复制到 `apps/web/out/reports-site/`。由于项目启用了 `trailingSlash: true`，`/reports-site/` 对应 `index.html`。Nginx 的 `index index.html` 和 `try_files $uri $uri/ =404` 可直接服务该目录；开发模式如 `/reports-site/` 返回 404，可先访问 `/reports-site/index.html`，或为该目录增加只在 `next dev` 下生效的 rewrite。生产静态导出不要依赖 Next rewrites。
+Next.js 静态导出会把 `public/reports-site/` 原样复制到 `dist/reports-site/`。由于项目启用了 `trailingSlash: true`，`/reports-site/` 对应 `index.html`。Nginx 的 `index index.html` 和 `try_files $uri $uri/ =404` 可直接服务该目录；开发模式如 `/reports-site/` 返回 404，可先访问 `/reports-site/index.html`，或为该目录增加只在 `next dev` 下生效的 rewrite。生产静态导出不要依赖 Next rewrites。
 
 ## 构建与 Nginx 部署
 
@@ -34,7 +34,7 @@ Next.js 静态导出会把 `apps/web/public/reports-site/` 原样复制到 `apps
 NEXT_PUBLIC_SITE_URL=http://localhost pnpm build
 ```
 
-确认 `apps/web/out/reports-site/index.html` 和所需资源存在，再把 `apps/web/out/` 的**内容**复制到 Nginx `root`。配置示例见 [`nginx-static-site.conf`](./nginx-static-site.conf)。不要把整个 `out/` 套一层目录，也不要配置所有 URL 都回退到根 `index.html` 的 SPA rewrite；Next 静态导出会为每条路由生成独立 HTML。相机、定位和 Web Crypto 需要安全上下文：HTTP 下建议使用 `localhost`，其他本地域名请配置 HTTPS。
+确认 `dist/reports-site/index.html` 和所需资源存在，再把 `dist/` 的**内容**复制到 Nginx `root`。配置示例见 [`nginx-static-site.conf`](./nginx-static-site.conf)。不要把整个 `dist/` 套一层目录，也不要配置所有 URL 都回退到根 `index.html` 的 SPA rewrite；Next 静态导出会为每条路由生成独立 HTML。相机、定位和 Web Crypto 需要安全上下文：HTTP 下建议使用 `localhost`，其他本地域名请配置 HTTPS。
 
 ## 网络功能与数据边界
 

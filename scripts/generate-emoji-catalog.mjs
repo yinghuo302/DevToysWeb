@@ -15,7 +15,7 @@ import { writeFile } from 'node:fs/promises'
  * per base emoji. Japanese names come from CLDR's short "tts" annotation,
  * the same data Japanese IME emoji pickers use.
  *
- * Run: pnpm --filter @repo/web generate:emoji-catalog
+ * Run: pnpm generate:emoji-catalog
  */
 
 const EMOJI_TEST_URL = 'https://unicode.org/Public/emoji/latest/emoji-test.txt'
