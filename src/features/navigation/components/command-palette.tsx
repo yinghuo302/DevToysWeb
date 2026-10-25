@@ -9,20 +9,7 @@ import { useRecentTools } from '@/hooks/use-recent-tools'
 import { getToolDescription, getToolTitle, type ToolDefinition, tools } from '@/libs/domain/catalog'
 import { getToolPath } from '@/libs/domain/tool-path'
 import { cn } from '@/libs/utils'
-
-/** Every string a tool can reasonably be searched by, in both locales. */
-const haystack = (tool: ToolDefinition) =>
-  [
-    tool.slug,
-    tool.pathSlug,
-    tool.category,
-    tool.title.ja,
-    tool.title.en,
-    tool.description.ja,
-    tool.description.en,
-  ]
-    .join(' ')
-    .toLowerCase()
+import { matchesToolSearch } from '../functions/tool-search'
 
 export const CommandPalette = ({
   open,
@@ -39,15 +26,11 @@ export const CommandPalette = ({
   const listRef = useRef<HTMLDivElement>(null)
   const listId = useId()
 
-  const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
   const results = useMemo(() => {
-    if (!terms.length) return recent.length ? recent : tools.slice(0, 8)
-    return tools.filter((tool) => {
-      const text = haystack(tool)
-      return terms.every((term) => text.includes(term))
-    })
-  }, [recent, terms])
-  const showingRecent = !terms.length && recent.length > 0
+    if (!query.trim()) return recent.length ? recent : tools.slice(0, 8)
+    return tools.filter((tool) => matchesToolSearch(tool, query, locale))
+  }, [locale, query, recent])
+  const showingRecent = !query.trim() && recent.length > 0
 
   // Reset the transient state each time the palette is summoned.
   useEffect(() => {
