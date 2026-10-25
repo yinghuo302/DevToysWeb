@@ -55,8 +55,7 @@
   --warning: #ad3e0b;
 
   --radius: 10px;
-  /* Single source of truth for the sticky header, shared by the sidebar's
-     offset and height so the two can never drift apart. */
+  /* Shared by the sticky app header, fixed-homepage spacer, and sidebar offset. */
   --header-height: 3.5rem;
 }
 
@@ -85,6 +84,11 @@
   --destructive-foreground: #0f1116;
   --success: #69db7c;
   --warning: #ffa94d;
+}
+
+/* A fixed homepage header leaves normal flow, so reserve its height in the wrapper. */
+[data-app-chrome="header"]:has([data-home-page="true"]) {
+  height: var(--header-height);
 }
 
 @theme inline {
