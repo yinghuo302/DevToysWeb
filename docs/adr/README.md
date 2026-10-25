@@ -15,5 +15,6 @@
 | [0003](0003-node-24-compatibility-and-chinese-localization.md) | Node 24 compatibility and Chinese localization | Accepted |
 | [0004](0004-host-standalone-static-sites.md) | Static export and local Nginx hosting | Accepted |
 | [0005](0005-single-package-root-src-dist.md) | Single pnpm project with root src and dist | Accepted |
+| [0007](0007-normalize-windows-static-export-rsc-paths.md) | Normalize Windows static-export RSC payload paths | Accepted |
 
 テンプレート: [template.md](template.md)

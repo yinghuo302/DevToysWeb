@@ -26,6 +26,10 @@ DevToysWeb 只构建静态文件，并由本地 Nginx 托管。独立网站保�
 
 Next.js 静态导出会把 `public/reports-site/` 原样复制到 `dist/reports-site/`。由于项目启用了 `trailingSlash: true`，`/reports-site/` 对应 `index.html`。Nginx 的 `index index.html` 和 `try_files $uri $uri/ =404` 可直接服务该目录；开发模式如 `/reports-site/` 返回 404，可先访问 `/reports-site/index.html`，或为该目录增加只在 `next dev` 下生效的 rewrite。生产静态导出不要依赖 Next rewrites。
 
+### Next.js 16 在 Windows 构建后的 RSC 404
+
+Next.js 16 的静态导出在 Windows 构建时可能把 RSC payload 写入嵌套目录，例如 `__next.$d$locale/$d$category/$d$tool/__PAGE__.txt`，而浏览器请求的是同目录下点分隔的 `__next.$d$locale.$d$category.$d$tool.__PAGE__.txt`。这会导致链接预取出现 404；这是构建产物路径问题，不是 Nginx 缺少 SPA fallback。项目在 `next.config.js` 中启用构建 adapter，将这些 `.txt` payload 移到 Next.js 客户端请求的路径。Windows 上更新 adapter 后请重新运行 `pnpm build` 并重新部署完整的 `dist/`。Linux/macOS 构建通常不会产生此路径差异。参考 [Next.js issue #85374](https://github.com/vercel/next.js/issues/85374)。
+
 ## 构建与 Nginx 部署
 
 从仓库根目录构建：
